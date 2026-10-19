@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171819">
+  <meta name="description" content="Atheria is an in-progress interactive concept for agentic AI in a 3D workspace.">
+  <title>Atheria - Interactive 3D Workspace Concept</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; --bg:#171819; --panel:#202122; --panel-2:#252627; --line:#3b3c3b; --ink:#f2f0e9; --muted:#aaa8a1; --coral:#ff786d; --coral-soft:#3b2624; --mint:#b8e5d3; --mono:'DM Mono',monospace; --sans:'DM Sans',sans-serif; --display:'Manrope',sans-serif; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; color:var(--ink); background:radial-gradient(ellipse at 75% 0%,#302421 0,transparent 30%),var(--bg); font:14px/1.55 var(--sans); }
+    button,input { font:inherit; }
+    button:focus-visible,input:focus-visible,a:focus-visible { outline:2px solid var(--coral); outline-offset:3px; }
+    a { color:inherit; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap:20px; min-height:68px; padding:0 clamp(18px,4vw,64px); border-bottom:1px solid #ffffff16; background:#171819dc; }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; font:800 14px var(--display); letter-spacing:.03em; }
+    .brand-mark { display:grid; width:34px; height:34px; place-items:center; color:#191919; background:var(--coral); clip-path:polygon(0 0,77% 0,100% 23%,100% 100%,20% 100%,0 80%); font-weight:800; }
+    .top-links { display:flex; align-items:center; gap:18px; color:var(--muted); font-size:12px; }
+    .top-links a { text-decoration:none; }.top-links a:hover { color:var(--ink); }
+    .live-status,.prototype-pill { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid #ff786d55; color:#ffc1ba; background:#ff786d12; border-radius:4px; font:10px var(--mono); letter-spacing:.04em; text-transform:uppercase; }
+    .live-status i,.progress-tag span { width:7px;height:7px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 3px #ff786d20; }
+    main { width:min(1440px,100% - 48px); margin:0 auto; padding:34px 0 60px; }
+    .intro { display:flex; justify-content:space-between; align-items:end; gap:30px; margin-bottom:22px; }
+    .eyebrow { margin:0 0 8px; color:var(--coral); font:11px var(--mono); letter-spacing:.12em; text-transform:uppercase; }
+    h1 { margin:0; font:800 clamp(30px,4vw,48px)/1.04 var(--display); letter-spacing:-.055em; }
+    .intro-copy { max-width:470px; margin:10px 0 0; color:#c8c6c0; font-size:14px; }
+    .intro-side { display:grid; justify-items:end; gap:12px; }
+    .farmstead-tab { padding:9px 12px; color:#777771; background:#202122; border:1px dashed #51514d; border-radius:4px; font:11px var(--mono); }
+    .workspace { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:14px; }
+    .panel { background:linear-gradient(145deg,#222324,#1d1e1f); border:1px solid var(--line); border-radius:8px; box-shadow:0 18px 45px #0003; }
+    .scene-panel { min-width:0; overflow:hidden; }
+    .panel-head { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:16px 18px; border-bottom:1px solid var(--line); }
+    .panel-title { display:flex; align-items:center; gap:10px; font-weight:700; }
+    .panel-title small { display:block; color:var(--muted); font-size:11px; font-weight:400; }
+    .scene-controls { display:flex; gap:6px; }.scene-controls button { padding:7px 10px; color:var(--muted); background:transparent; border:1px solid var(--line); border-radius:4px; cursor:pointer; font-size:11px; }
+    .scene-controls button[aria-pressed="true"] { color:var(--ink); border-color:#ff786d80; background:#ff786d12; }
+    .scene-wrap { position:relative; display:grid; min-height:480px; place-items:center; overflow:hidden; background:radial-gradient(ellipse at 50% 48%,#33302e 0,#242526 55%,#202122 100%); isolation:isolate; }
+    .scene-wrap::before { position:absolute; inset:0; z-index:-1; background-image:linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px); background-size:42px 42px; transform:perspective(700px) rotateX(58deg) scale(1.5); transform-origin:center 62%; content:''; mask-image:linear-gradient(transparent,#000 20%,#000 88%,transparent); }
+    .scene-label { position:absolute; top:18px; left:20px; color:#a8a69e; font:10px var(--mono); letter-spacing:.1em; text-transform:uppercase; }
+    .scene-objective { position:absolute; right:18px; top:15px; color:#bbb8b2; font-size:11px; }
+    .room { position:relative; width:min(720px,90%); height:350px; perspective:900px; transform-style:preserve-3d; }
+    .floor { position:absolute; left:50%; top:53%; width:570px; height:320px; transform:translate(-50%,-50%) rotateX(58deg) rotateZ(-12deg); transform-style:preserve-3d; background:linear-gradient(135deg,#4a413c,#332f2c); border:1px solid #74625a; box-shadow:0 28px 0 #151617,0 36px 65px #0008; }
+    .floor::after { position:absolute; inset:0; background-image:linear-gradient(#ffffff0a 1px,transparent 1px),linear-gradient(90deg,#ffffff0a 1px,transparent 1px); background-size:38px 38px; content:''; }
+    .wall { position:absolute; z-index:0; background:linear-gradient(135deg,#393535,#272829); border:1px solid #62504b; }
+    .wall.back { left:50%; top:32px; width:530px; height:130px; transform:translateX(-50%) rotateX(0deg); border-bottom-color:#8b6b60; }
+    .wall.side { left:calc(50% - 265px); top:31px; width:130px; height:245px; transform:skewY(-29deg); transform-origin:left top; background:linear-gradient(120deg,#3e3734,#292a2b); }
+    .window { position:absolute; top:18px; left:54px; width:148px; height:74px; border:1px solid #ffb1a844; background:linear-gradient(135deg,#ff786d20,#e6c1aa0a); box-shadow:inset 0 0 25px #ff786d0b; }
+    .window::before,.window::after { position:absolute; background:#ffb1a833; content:''; }.window::before { left:50%;top:0;bottom:0;width:1px; }.window::after { top:50%;left:0;right:0;height:1px; }
+    .wall-sign { position:absolute; right:30px; top:28px; color:#ffb5ac; font:700 15px var(--display); letter-spacing:.12em; text-shadow:0 0 20px #ff786d55; }
+    .desk { position:absolute; z-index:2; width:132px; height:76px; border:1px solid #ae9180; background:linear-gradient(140deg,#806758,#5d4b42); transform:rotateX(58deg) rotateZ(-12deg); box-shadow:0 16px 0 #302723,0 22px 24px #0008; }
+    .desk::before { position:absolute; inset:8px; border:1px solid #d6b39b35; content:''; }
+    .desk::after { position:absolute; top:22px; left:31px; width:52px; height:30px; background:linear-gradient(135deg,#4d7180,#273a49); border:2px solid #b5c8c4; box-shadow:0 0 20px #86d7e133; content:''; }
+    .desk.one { left:calc(50% - 205px); top:145px; }.desk.two { left:calc(50% + 38px); top:105px; }.desk.three { left:calc(50% - 90px); top:232px; transform:scale(.83) rotateX(58deg) rotateZ(-12deg); }
+    .agent-figure { position:absolute; z-index:3; display:grid; justify-items:center; gap:6px; width:100px; padding:0; color:#f4eee8; background:none; border:0; cursor:pointer; transform:translate(-50%,-50%); transition:filter .2s, transform .2s; }
+    .agent-figure:hover,.agent-figure[aria-pressed="true"] { filter:drop-shadow(0 0 14px #ff786d83); transform:translate(-50%,-54%); }
+    .agent-figure.agent-one { left:calc(50% - 150px); top:167px; }.agent-figure.agent-two { left:calc(50% + 91px); top:127px; }.agent-figure.agent-three { left:calc(50% - 35px); top:258px; }
+    .avatar { position:relative; display:block; width:42px; height:42px; border:2px solid #f1d8c7; border-radius:50%; background:linear-gradient(145deg,#e8ae8a 0 48%,#4a6470 49%); box-shadow:0 4px 0 #302723,0 8px 20px #0008; }
+    .avatar::before { position:absolute; left:9px; top:8px; width:20px; height:11px; border-radius:12px 12px 8px 8px; background:#312823; content:''; }.avatar::after { position:absolute; left:14px; top:18px; width:12px; height:3px; background:#44312c; border-radius:4px; content:''; }
+    .agent-figure:nth-of-type(2) .avatar { background:linear-gradient(145deg,#edc8a9 0 48%,#766090 49%); }.agent-figure:nth-of-type(3) .avatar { background:linear-gradient(145deg,#dca47f 0 48%,#547d68 49%); }
+    .agent-name { display:block; padding:3px 7px; background:#1b1c1dcc; border:1px solid #ffffff25; border-radius:3px; font:10px var(--mono); }
+    .agent-state { display:flex; align-items:center; gap:5px; color:#c3beb7; font-size:9px; }.agent-state i { width:6px;height:6px;border-radius:50%;background:#91d3ac; }
+    .desk-lamp { position:absolute; z-index:4; left:calc(50% + 106px); top:95px; width:4px; height:28px; background:#efc27e; box-shadow:0 0 24px 10px #efc27e25; }
+    .scene-foot { position:absolute; bottom:14px; left:18px; right:18px; display:flex; justify-content:space-between; gap:12px; color:#aaa8a1; font:10px var(--mono); }
+    .side-stack { display:grid; align-content:start; gap:14px; }
+    .agents-panel,.activity-panel { padding:16px; }
+    .side-heading { display:flex; align-items:center; justify-content:space-between; margin:0 0 5px; font:700 14px var(--display); }
+    .side-caption { margin:0 0 15px; color:var(--muted); font-size:11px; }
+    .agent-list { display:grid; gap:7px; }
+    .agent-card { display:grid; grid-template-columns:35px minmax(0,1fr) auto; align-items:center; gap:9px; width:100%; padding:9px; color:var(--ink); text-align:left; background:#282929; border:1px solid #3b3c3b; border-radius:5px; cursor:pointer; transition:border-color .18s,background .18s; }
+    .agent-card:hover,.agent-card[aria-pressed="true"] { border-color:#ff786d87; background:#302827; }
+    .agent-card .avatar { width:32px;height:32px; }.agent-card .avatar::before { left:6px;top:5px;width:16px;height:9px; }.agent-card .avatar::after { left:11px;top:14px;width:10px; }
+    .agent-card strong,.agent-card small { display:block; }.agent-card strong { font-size:11px; }.agent-card small { color:var(--muted); font-size:9px; }
+    .state-pill { color:#b8e5d3; font:9px var(--mono); }
+    .agent-detail { margin-top:12px; padding:12px; background:#1b1c1d; border:1px solid #3b3c3b; border-radius:5px; }
+    .agent-detail label { display:block; margin-bottom:7px; color:var(--muted); font:10px var(--mono); text-transform:uppercase; }
+    .agent-detail h3 { margin:0; font:700 14px var(--display); }.agent-detail p { margin:5px 0 11px; color:#c5c2bc; font-size:11px; }
+    .task-form { display:flex; gap:6px; }.task-form input { min-width:0; width:100%; padding:8px; color:var(--ink); background:#121314; border:1px solid #494a49; border-radius:3px; font-size:10px; }.task-form button { flex:none; padding:7px 9px; color:#1c1715; background:var(--coral); border:0; border-radius:3px; cursor:pointer; font-size:10px; font-weight:700; }
+    .task-form button:hover { background:#ff958a; }.task-form button:disabled { opacity:.45;cursor:not-allowed; }
+    .activity-list { display:grid; gap:11px; margin:13px 0 0; padding:0; list-style:none; }.activity-list li { position:relative; padding-left:17px; color:#c5c2bc; font-size:10px; }.activity-list li::before { position:absolute;top:5px;left:0;width:7px;height:7px;border:1px solid var(--coral);border-radius:50%;content:''; }.activity-list time { display:block; margin-top:2px; color:#888780; font:9px var(--mono); }
+    .demo-note { margin-top:14px; padding:10px 12px; color:#c7c1b9; background:#ff786d0b; border-left:2px solid var(--coral); font-size:10px; }
+    .prototype-footer { display:flex; justify-content:space-between; gap:12px; margin-top:16px; color:#888780; font:10px var(--mono); }.prototype-footer a { color:#ff9a90;text-decoration:none; }.prototype-footer a:hover { text-decoration:underline; }
+    @media(max-width:950px) { .workspace { grid-template-columns:minmax(0,1fr) 280px; }.room { transform:scale(.88); }.scene-wrap { min-height:430px; } }
+    @media(max-width:720px) { .topbar { flex-wrap:wrap; padding:12px 18px; }.top-links { gap:12px; }.top-links a { display:none; } main { width:calc(100% - 28px);padding-top:24px; }.intro { display:block; }.intro-side { justify-items:start;margin-top:16px; }.workspace { grid-template-columns:1fr; }.side-stack { grid-template-columns:1fr; }.scene-wrap { min-height:390px; }.room { width:720px; transform:scale(.68); }.scene-foot { font-size:8px; } }
+    @media(max-width:430px) { .scene-wrap { min-height:330px; }.room { transform:scale(.53); }.panel-head { align-items:flex-start; flex-direction:column; }.scene-controls { width:100%; }.scene-controls button { flex:1; } }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; } }
+  </style>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="index.html#projects"><span class="brand-mark">A</span> ATHERIA</a><nav class="top-links" aria-label="Prototype navigation"><a href="#workspace">Workspace</a><a href="#agents">Agents</a><span class="live-status"><i></i> In active development</span></nav></header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">Atheria / Interactive concept</p><h1>A workspace where agents can act.</h1><p class="intro-copy">A 3D-inspired office concept for exploring how AI agents could plan work, collaborate, and interact with a shared environment.</p></div><div class="intro-side"><span class="prototype-pill">Live front-end prototype</span><button class="farmstead-tab" type="button" disabled title="Planned for a future stage">Farmstead plane / Planned</button></div></section>
+    <section class="workspace" id="workspace" aria-label="Atheria workspace prototype">
+      <article class="panel scene-panel"><div class="panel-head"><div class="panel-title"><span class="brand-mark">A</span><span>Studio workspace<small>3D environment exploration</small></span></div><div class="scene-controls" aria-label="Workspace view"><button type="button" aria-pressed="true">Office</button><button type="button" aria-pressed="false" disabled title="This plane is planned">Farmstead - planned</button></div></div>
+        <div class="scene-wrap"><span class="scene-label">Atheria / Office plane</span><span class="scene-objective">Shared workspace / Local demo</span>
+          <div class="room" aria-label="Isometric office scene with desks and three prototype agents"><div class="floor"></div><div class="wall back"><div class="window"></div><span class="wall-sign">A T H E R I A</span></div><div class="wall side"></div><div class="desk one"></div><div class="desk two"></div><div class="desk three"></div><span class="desk-lamp"></span>
+            <button class="agent-figure agent-one" type="button" data-agent="mira" aria-label="Select Mira, planning agent" aria-pressed="true"><span class="avatar"></span><span class="agent-name">Mira</span><span class="agent-state"><i></i> Planning</span></button>
+            <button class="agent-figure agent-two" type="button" data-agent="sol" aria-label="Select Sol, research agent" aria-pressed="false"><span class="avatar"></span><span class="agent-name">Sol</span><span class="agent-state"><i></i> Idle</span></button>
+            <button class="agent-figure agent-three" type="button" data-agent="ren" aria-label="Select Ren, build agent" aria-pressed="false"><span class="avatar"></span><span class="agent-name">Ren</span><span class="agent-state"><i></i> Idle</span></button>
+          </div>
+          <div class="scene-foot"><span>Environment preview / Interactive agent selection</span><span>Build 0.1 / 3D plane</span></div>
+        </div>
+      </article>
+      <aside class="side-stack" id="agents"><section class="panel agents-panel"><h2 class="side-heading">Workspace agents <span id="agent-count">1 active</span></h2><p class="side-caption">Select a character to inspect its current role.</p>
+        <div class="agent-list">
+          <button class="agent-card" type="button" data-agent="mira" aria-pressed="true"><span class="avatar"></span><span><strong>Mira</strong><small>Planner / Task routing</small></span><span class="state-pill">Planning</span></button>
+          <button class="agent-card" type="button" data-agent="sol" aria-pressed="false"><span class="avatar"></span><span><strong>Sol</strong><small>Research / Context</small></span><span class="state-pill">Idle</span></button>
+          <button class="agent-card" type="button" data-agent="ren" aria-pressed="false"><span class="avatar"></span><span><strong>Ren</strong><small>Builder / Prototyping</small></span><span class="state-pill">Idle</span></button>
+        </div>
+        <div class="agent-detail"><label>Selected agent</label><h3 id="selected-name">Mira / Planner</h3><p id="selected-copy">Breaks a goal into steps and coordinates the next action.</p><form class="task-form" id="task-form"><input id="task-input" type="text" maxlength="90" placeholder="Describe a small task..." aria-label="Describe a task for the selected agent" required><button type="submit">Assign</button></form></div>
+        <p class="demo-note">Prototype note: agent responses and task states are simulated. Live AI orchestration is still in development.</p>
+      </section>
+      <section class="panel activity-panel"><h2 class="side-heading">Activity</h2><p class="side-caption">Recent events in this local demo.</p><ul class="activity-list" id="activity-list" aria-live="polite"><li>Mira mapped the workspace task into three steps.<time>Just now / Demo activity</time></li><li>Sol is ready to gather project context.<time>Waiting for assignment</time></li><li>Ren is standing by for a build task.<time>Waiting for assignment</time></li></ul></section></aside>
+    </section>
+    <footer class="prototype-footer"><span>Atheria is an active work in progress.</span><a href="index.html#projects">Back to portfolio -&gt;</a></footer>
+  </main>
+  <script>
+    const profiles = {
+      mira: { name: 'Mira', role: 'Planner', copy: 'Breaks a goal into steps and coordinates the next action.' },
+      sol: { name: 'Sol', role: 'Research', copy: 'Gathers useful context and prepares concise research notes.' },
+      ren: { name: 'Ren', role: 'Builder', copy: 'Turns an approved plan into a small working interface.' }
+    };
+    let selected = 'mira';
+    const status = { mira: 'Planning', sol: 'Idle', ren: 'Idle' };
+    const list = document.getElementById('activity-list');
+    const updateSelection = (key) => {
+      selected = key;
+      const profile = profiles[key];
+      document.querySelectorAll('[data-agent]').forEach((el) => el.setAttribute('aria-pressed', String(el.dataset.agent === key)));
+      document.getElementById('selected-name').textContent = `${profile.name} / ${profile.role}`;
+      document.getElementById('selected-copy').textContent = profile.copy;
+    };
+    document.querySelectorAll('[data-agent]').forEach((el) => el.addEventListener('click', () => updateSelection(el.dataset.agent)));
+    document.getElementById('task-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const input = document.getElementById('task-input');
+      const task = input.value.trim();
+      if (!task) return;
+      const profile = profiles[selected];
+      status[selected] = 'Working';
+      document.querySelectorAll(`[data-agent="${selected}"] .agent-state, [data-agent="${selected}"] .state-pill`).forEach((el) => { if (el.classList.contains('state-pill')) el.textContent = 'Working'; else el.innerHTML = '<i></i> Working'; });
+      const item = document.createElement('li');
+      item.textContent = `${profile.name} started: ${task}`;
+      const time = document.createElement('time'); time.textContent = 'Just now / Simulated task'; item.append(time); list.prepend(item);
+      document.getElementById('agent-count').textContent = `${Object.values(status).filter((value) => value === 'Working' || value === 'Planning').length} active`;
+      input.value = '';
+    });
+  </script>
+</body>
+</html>

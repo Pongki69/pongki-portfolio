@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    document.documentElement.classList.add('is-loading');
+    try {
+      const initialTheme = localStorage.getItem('portfolio-theme');
+      document.documentElement.dataset.theme = initialTheme === 'light' ? 'light' : 'dark';
+    } catch { document.documentElement.dataset.theme = 'dark'; }
+    window.__portfolioLoadStarted = performance.now();
+  </script>
+  <meta name="theme-color" content="#13213a">
+  <meta name="description" content="Pongki's developer portfolio: projects, coding languages, and learning journey.">
+  <title>Pongki — Developer Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-skeleton" aria-hidden="true">
+    <div class="page-skeleton-shell">
+      <div class="skeleton-top"><i class="skeleton-brand"></i><div class="skeleton-nav"><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="skeleton-hero">
+        <div class="skeleton-copy"><i class="skeleton-eyebrow"></i><i class="skeleton-title"></i><i class="skeleton-title short"></i><div class="skeleton-lines"><i></i><i></i><i class="short"></i></div><div class="skeleton-actions"><i></i><i></i><i></i></div></div>
+        <div class="skeleton-profile"><div class="skeleton-profile-top"><i></i><i></i></div><div class="skeleton-portrait-row"><i class="skeleton-portrait"></i><div class="skeleton-caption"><i></i><i></i></div></div><i class="skeleton-profile-heading"></i><div class="skeleton-lines"><i></i><i></i></div><div class="skeleton-tags"><i></i><i></i><i></i></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap">
+    <header class="topbar"><a class="brand" href="#home" aria-label="Pongki home">P<span>.</span></a><nav id="mobile-nav" aria-label="Main navigation"><div class="mobile-nav-head"><strong>Navigate</strong><button class="mobile-nav-close" id="mobile-nav-close" type="button" aria-label="Close navigation">×</button></div><div class="nav-links"><a href="#projects">Projects</a><a href="#skills">Skills</a><a href="#about">About</a><a href="#education">Education</a><a href="#contact">Contact</a></div></nav><div class="nav-controls"><button class="mobile-menu-toggle" id="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menu</span></button><button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode"><svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 15.3A8.5 8.5 0 0 1 8.7 3.5 8.5 8.5 0 1 0 20.5 15.3Z"/></svg><svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg><span class="theme-toggle-label">Dark</span></button><button class="music-toggle" id="music-toggle" type="button" aria-pressed="false" aria-label="Turn background music on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span id="music-label">Music off</span></button></div></header><button class="mobile-nav-backdrop" id="mobile-nav-backdrop" type="button" aria-label="Close navigation"></button>
+  </div>
+  <main class="wrap content-wrap">
+      <section class="hero" id="home">
+        <svg class="hero-neural" viewBox="0 0 720 520" fill="none" aria-hidden="true">
+          <g class="neural-lines" stroke="currentColor" stroke-width="1.15">
+            <path d="M28 112 158 92 286 126 414 86 552 118 686 76"/><path d="M28 112 84 258 214 226 286 126"/><path d="M158 92 214 226 344 264 414 86"/><path d="M286 126 344 264 480 226 552 118"/><path d="M414 86 480 226 616 258 686 76"/><path d="M84 258 28 412 164 438 214 226"/><path d="M214 226 164 438 306 404 344 264"/><path d="M344 264 306 404 456 430 480 226"/><path d="M480 226 456 430 600 394 616 258"/><path d="M616 258 600 394 686 450"/><path d="M28 412 164 438 306 404 456 430 600 394 686 450"/>
+          </g>
+          <g class="neural-nodes" fill="currentColor">
+            <circle cx="28" cy="112" r="4"/><circle cx="158" cy="92" r="4"/><circle cx="286" cy="126" r="6"/><circle cx="414" cy="86" r="4"/><circle cx="552" cy="118" r="5"/><circle cx="686" cy="76" r="4"/><circle cx="84" cy="258" r="5"/><circle cx="214" cy="226" r="4"/><circle cx="344" cy="264" r="7"/><circle cx="480" cy="226" r="4"/><circle cx="616" cy="258" r="5"/><circle cx="28" cy="412" r="4"/><circle cx="164" cy="438" r="5"/><circle cx="306" cy="404" r="4"/><circle cx="456" cy="430" r="5"/><circle cx="600" cy="394" r="4"/><circle cx="686" cy="450" r="5"/>
+          </g>
+        </svg>
+        <div class="hero-copy"><div class="eyebrow">Web Developer · Portfolio 2026</div><h1>Alfonso A.<br>Panisales.</h1><p>Information Technology graduate focused on web application development. I build practical projects with Laravel, JavaScript, and MySQL.</p><div class="actions"><a class="button" href="#projects">Explore my work <span>↘</span></a><button class="button secondary contact-trigger" id="contact-trigger" type="button">Contact me</button><a class="button secondary button-quiet" href="Resume%20-%20Panisales,%20Alfonso%20A..pdf" download>Download resume ↓</a><a class="button secondary button-quiet" href="https://github.com/Pongki69" target="_blank" rel="noreferrer">GitHub ↗</a></div></div>
+        <aside class="hero-aside" aria-label="Developer profile">
+          <div class="profile-topline"><span class="profile-kicker">A little about me</span><span class="availability"><span aria-hidden="true"></span> Open to opportunities</span></div>
+          <div class="portrait-wrap"><img class="portrait" src="graduation-photo.png" alt="Alfonso A. Panisales at graduation"><div class="portrait-caption"><span>Information Technology</span><strong>Graduate · Los Baños, Laguna</strong></div></div>
+          <div class="profile-copy"><strong>Building useful web experiences.</strong><p>I turn ideas into practical, user-focused applications and keep learning through hands-on projects.</p></div>
+          <div class="profile-focus" aria-label="Areas of focus"><span><i aria-hidden="true">↗</i> Web apps</span><span><i aria-hidden="true">⌘</i> REST APIs</span><span><i aria-hidden="true">✳</i> Automation</span></div>
+          <div class="tech-floats" aria-hidden="true"><i class="devicon-html5-plain colored"></i><i class="devicon-javascript-plain colored"></i><i class="devicon-css3-plain colored"></i><i class="devicon-php-plain colored"></i><i class="devicon-laravel-original colored"></i><i class="devicon-mysql-plain colored"></i><i class="devicon-typescript-plain colored"></i></div>
+        </aside>
+      </section>
+    <section class="section" id="projects"><div class="section-head"><div><div class="label">01 / Selected work</div><h2>Featured projects</h2></div><div class="section-note">Live work and an active project in development.</div></div><div class="project-group live-projects"><div class="project-group-label"><span>Live projects</span><span>Open and explore</span></div><div class="project-grid featured-projects"><article class="project project-featured"><div class="project-top"><div class="project-link"><div class="project-icon orange" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v3M22.5 12h-3M12 22.5v-3M1.5 12h3M18.3 5.7l-2.1 2.1"/></svg></div><a class="arrow" href="https://event-horizon-gray.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Open Event Horizon website">↗</a></div><h3>Event Horizon</h3><p>A multi-game tracker for gacha events, character banners, and endgame rotations. Browse a live calendar or table, check countdowns, and keep up with daily data refreshes.</p><div class="project-meta"><span><b>Coverage</b> Genshin Impact, Honkai: Star Rail, Zenless Zone Zero, and Wuthering Waves</span><span><b>Automation</b> Puppeteer + scheduled GitHub Actions</span></div><div class="project-story"><span class="project-story-label">What it offers</span><p>Filter the calendar by game, hide ended or permanent events, and follow banner and endgame timers in a responsive view.</p><details class="project-gallery"><summary>Explore Event Horizon · 3 screens</summary><div class="project-gallery-grid"><a href="assets/event-horizon-landing.png" target="_blank"><img src="assets/event-horizon-landing.png" alt="Event Horizon landing page introducing its gaming event tracker" loading="lazy"><span>Landing page</span></a><a href="assets/event-horizon-features.png" target="_blank"><img src="assets/event-horizon-features.png" alt="Event Horizon overview of calendar, countdown, endgame, refresh, filters, and responsive features" loading="lazy"><span>Feature overview</span></a><a href="assets/event-horizon-calendar.png" target="_blank"><img src="assets/event-horizon-calendar.png" alt="Event Horizon live calendar with game filters and banner countdowns" loading="lazy"><span>Live event calendar</span></a></div></details></div><div class="project-languages" aria-label="Programming languages"><span class="language-caption">Languages</span><span class="project-language"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 2h20l-1.8 18L12 22l-8.2-2L2 2Zm4.2 4 .3 2.2h11.1l-.3 2.1H6.7l.7 7 4.6 1.2 4.6-1.2.3-3.5h-2.3l-.2 1.8-2.4.6-2.4-.6-.3-2.3h7.5l.8-7.3H6.2Z"/></svg>HTML</span><span class="project-language"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 2h20v20H2z"/><path fill="#fff" d="M12.7 17.1c.4.7.9 1.1 1.8 1.1.7 0 1.1-.3 1.1-.7 0-.5-.4-.7-1.2-1l-.4-.2c-1.3-.5-2.2-1.2-2.2-2.6 0-1.3 1-2.3 2.6-2.3 1.1 0 1.9.4 2.4 1.4l-1.3.8c-.3-.5-.6-.8-1.1-.8s-.8.3-.8.7c0 .5.3.7 1 1l.4.2c1.5.6 2.4 1.3 2.4 2.8 0 1.6-1.3 2.4-3 2.4-1.7 0-2.8-.8-3.4-1.9l1.7-.9ZM5.4 17.3c.3.5.5 1 1.2 1 .6 0 .9-.2.9-1.1v-5.6h1.9v5.7c0 1.9-1.1 2.8-2.7 2.8-1.5 0-2.4-.8-2.9-1.8l1.6-1Z"/></svg>JavaScript</span><span class="project-language"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 2h20v20H2z"/><path fill="#fff" d="m5 6 6 6-6 6 1.5 1.5L14 12 6.5 4.5 5 6Zm9 12h6v-2h-6v2Z"/></svg>CSS</span><span class="project-language"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 2h20v20H2z"/><path fill="#fff" d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg>TypeScript</span><span class="project-language"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="m6 9 3 3-3 3m5 0h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Batchfile</span></div></div><details class="live-project-preview"><summary>Explore Event Horizon live site</summary><div class="live-project-preview-content"><p>The live website is embedded below. You can also <a href="https://event-horizon-gray.vercel.app/" target="_blank" rel="noopener noreferrer">open it in a new tab ↗</a>.</p><iframe title="Event Horizon live website" src="https://event-horizon-gray.vercel.app/" loading="lazy" allow="fullscreen; clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></details><div class="project-foot"><span class="tag">Web automation</span><span class="project-actions"><a href="https://github.com/Pongki69/Event-Horizon" target="_blank" rel="noopener noreferrer">Source code ↗</a><a href="https://event-horizon-gray.vercel.app/" target="_blank" rel="noopener noreferrer">Open live site ↗</a></span></div></article><article class="project"><div class="project-top"><div class="project-link"><div class="project-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.4"/><circle cx="5" cy="6" r="1.8"/><circle cx="19" cy="6" r="1.8"/><circle cx="5" cy="18" r="1.8"/><circle cx="19" cy="18" r="1.8"/><path d="m6.7 7.3 3.6 3.2m7-3.2-3.6 3.2m-7 6.1 3.6-3.2m7 3.2-3.6-3.2"/></svg></div><a class="arrow" href="https://catalyst-hub-beryl.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Open Catalyst Hub website">↗</a></div><h3>Catalyst Hub</h3><p>A MERN client-service platform that guides work from a client request through agent proposals, selection, and delivery tracking.</p><div class="project-meta"><span><b>Stack</b> MongoDB · Express.js · React · Node.js</span><span><b>Client flow</b> Submit, compare proposals, select, track</span></div><div class="project-story"><span class="project-story-label">Client workflow</span><div class="workflow-steps" aria-label="Submit a request, review proposals, choose an agent, and track progress"><span>Submit request</span><i aria-hidden="true">→</i><span>Review proposals</span><i aria-hidden="true">→</i><span>Choose agent</span><i aria-hidden="true">→</i><span>Track progress</span></div><div class="project-status"><span class="project-story-label">Request status</span><div class="workflow-steps" aria-label="Submitted, in progress, client review, resolved"><span>Submitted</span><i aria-hidden="true">→</i><span>In progress</span><i aria-hidden="true">→</i><span>Client review</span><i aria-hidden="true">→</i><span>Resolved</span></div></div><div class="project-agent-note"><strong>Agent workspace</strong><p>Agents review and respond to briefs, track team requests, coordinate progress, and message clients.</p></div><details class="project-gallery"><summary>Explore the Catalyst Hub workflow · 9 screens</summary><div class="project-gallery-grid"><a href="assets/catalyst-request-progress.png" target="_blank" rel="noopener noreferrer"><img src="assets/catalyst-request-progress.png" alt="Client request detail with status timeline, agent responses, and conversation" loading="lazy"><span>Request progress</span></a><a href="assets/catalyst-client-calendar.png" target="_blank" rel="noopener noreferrer"><img src="assets/catalyst-client-calendar.png" alt="Client calendar showing scheduled requests and due dates" loading="lazy"><span>Client calendar</span></a><a href="assets/catalyst-private-messages.png" target="_blank" rel="noopener noreferrer"><img src="assets/catalyst-private-messages.png" alt="Private client and agent message conversation" loading="lazy"><span>Private messages</span></a><a href="assets/catalyst-client-activity.png" target="_blank" rel="noopener noreferrer"><img src="assets/catalyst-client-activity.png" alt="Client activity timeline with request events and filters" loading="lazy"><span>Activity history</span></a><a href="assets/catalyst-agent-overview.png" target="_blank" rel="noopener noreferrer"><img src="assets/catalyst-agent-overview.png" alt="Agent workspace overview showing workload and recent requests" loading="lazy"><span>Agent overview</span></a><a href="assets/catalyst-agent-board.png" target="_blank" rel="noopener noreferrer"><img src="assets/catalyst-agent-board.png" alt="Agent request board with status, priority, and team filters" loading="lazy"><span>Team request board</span></a><a href="assets/catalyst-agent-response.png" target="_blank" rel="noopener noreferrer"><img src="assets/catalyst-agent-response.png" alt="Agent response form for explaining an approach to a client request" loading="lazy"><span>Agent proposal response</span></a><a href="assets/catalyst-team-progress.png" target="_blank" rel="noopener noreferrer"><img src="assets/catalyst-team-progress.png" alt="Agent request detail with progress timeline, coordination, and team information" loading="lazy"><span>Team coordination</span></a><a href="assets/catalyst-agent-calendar.png" target="_blank" rel="noopener noreferrer"><img src="assets/catalyst-agent-calendar.png" alt="Agent work calendar with active requests and deadlines" loading="lazy"><span>Agent work calendar</span></a></div></details></div><div class="project-languages" aria-label="Programming languages"><span class="language-caption">Languages</span><span class="project-language"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 2h20v20H2z"/><path fill="#fff" d="M3.5 6h17v2H14v10h-2V8H3.5V6Z"/></svg>TypeScript</span><span class="project-language"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 2h20v20H2z"/><path fill="#fff" d="m5 6 6 6-6 6 1.5 1.5L14 12 6.5 4.5 5 6Zm9 12h6v-2h-6v2Z"/></svg>CSS</span><span class="project-language"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 2h20l-1.8 18L12 22l-8.2-2L2 2Zm4.2 4 .3 2.2h11.1l-.3 2.1H6.7l.7 7 4.6 1.2 4.6-1.2.3-3.5h-2.3l-.2 1.8-2.4.6-2.4-.6-.3-2.3h7.5l.8-7.3H6.2Z"/></svg>HTML</span><span class="project-language"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 2h20v20H2z"/><path fill="#fff" d="M15.5 17.6c.4.7.9 1.1 1.8 1.1.7 0 1.1-.3 1.1-.7 0-.5-.4-.7-1.2-1l-.4-.2c-1.3-.5-2.2-1.2-2.2-2.6 0-1.3 1-2.3 2.6-2.3 1.1 0 1.9.4 2.4 1.4l-1.3.8c-.3-.5-.6-.8-1.1-.8s-.8.3-.8.7c0 .5.3.7 1 1l.4.2c1.5.6 2.4 1.3 2.4 2.8 0 1.6-1.3 2.4-3 2.4-1.7 0-2.8-.8-3.4-1.9l1.7-.9ZM8.2 17.8c.3.5.5 1 1.2 1 .6 0 .9-.2.9-1.1v-5.6h1.9v5.7c0 1.9-1.1 2.8-2.7 2.8-1.5 0-2.4-.8-2.9-1.8l1.6-1Z"/></svg>JavaScript</span></div></div><details class="live-project-preview"><summary>Explore the Catalyst Hub live site</summary><div class="live-project-preview-content"><p>The live website is embedded below. You can also <a href="https://catalyst-hub-beryl.vercel.app/" target="_blank" rel="noopener noreferrer">open it in a new tab ↗</a>.</p><iframe title="Catalyst Hub live website" src="https://catalyst-hub-beryl.vercel.app/" loading="lazy" allow="fullscreen; clipboard-read; clipboard-write" referrerpolicy="strict-origin-when-cross-origin"></iframe></div></details><div class="project-foot"><span class="tag">Web development</span><span class="project-actions"><a href="https://github.com/Pongki69/CatalystHub" target="_blank" rel="noopener noreferrer">Source code ↗</a><a href="https://catalyst-hub-beryl.vercel.app/" target="_blank" rel="noopener noreferrer">Open live site ↗</a></span></div></article></div></div><div class="project-group in-progress-projects"><div class="project-group-label"><span>In progress</span><span>Currently building</span></div><div class="project-grid"><article class="project atheria-project"><div class="project-top"><div class="project-link"><div class="project-icon violet" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 8.5 5v10L12 22l-8.5-5V7L12 2Z"/><path d="m3.8 7.2 8.2 4.9 8.2-4.9M12 12v9.5"/><path d="m8 4.4 8.3 4.9"/></svg></div><span class="tag progress-tag"><span aria-hidden="true"></span> In progress</span></div><h3>Atheria</h3><p>An early interactive prototype for exploring agentic AI inside a 3D workspace. This live demo shows the environment direction and simulated agent task flow.</p><div class="project-meta"><span><b>Current focus</b> 3D workspace and agent interaction</span><span><b>Next plane</b> Farmstead game environment</span></div><div class="project-story"><span class="project-story-label">Prototype status</span><p>Explore a working front-end concept. Agent actions are simulated while the 3D environment and AI behavior are developed.</p></div></div><div class="project-foot"><span class="tag">3D environment · Agentic AI</span><a class="atheria-live-link" href="atheria.html">Open live prototype <span aria-hidden="true">-&gt;</span></a></div></article></div></div></section>
+    <section class="section" id="skills"><div class="section-head"><div><div class="label">02 / Skills &amp; languages</div><h2>My toolkit</h2></div><div class="section-note">Core technologies and developing skills, grouped by how I use them.</div></div><div class="skill-layout"><div class="skill-card"><div class="label">Technical skills</div><div class="skill-groups">
+      <article class="skill-group"><div class="skill-group-head"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="15" rx="2"/><path d="M3 8h18M7 6h.01M10 6h.01M9 22h6m-3-3v3"/></svg><h3>Frontend</h3><span class="skill-level">Core + React basics</span></div><div class="skill-tags"><span class="tool-chip"><i class="tool-logo devicon-html5-plain colored" aria-hidden="true"></i>HTML</span><span class="tool-chip"><i class="tool-logo devicon-css3-plain colored" aria-hidden="true"></i>CSS</span><span class="tool-chip"><i class="tool-logo devicon-bootstrap-plain colored" aria-hidden="true"></i>Bootstrap</span><span class="tool-chip"><i class="tool-logo devicon-tailwindcss-original colored" aria-hidden="true"></i>Tailwind CSS</span><span class="tool-chip"><i class="tool-logo devicon-javascript-plain colored" aria-hidden="true"></i>JavaScript</span><span class="tool-chip"><i class="tool-logo devicon-react-original colored" aria-hidden="true"></i>React</span></div><p class="skill-note">React — foundational knowledge</p></article>
+      <article class="skill-group"><div class="skill-group-head"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="6" rx="2"/><rect x="4" y="14" width="16" height="6" rx="2"/><path d="M8 7h.01M8 17h.01M12 7h5m-5 10h5"/></svg><h3>Backend</h3><span class="skill-level">Core + learning</span></div><div class="skill-tags"><span class="tool-chip"><i class="tool-logo devicon-php-plain colored" aria-hidden="true"></i>PHP</span><span class="tool-chip"><i class="tool-logo devicon-laravel-original colored" aria-hidden="true"></i>Laravel</span><span class="tool-chip"><i class="tool-logo devicon-nodejs-plain colored" aria-hidden="true"></i>Node.js</span><span class="tool-chip"><i class="tool-logo devicon-express-original colored" aria-hidden="true"></i>Express.js</span></div><p class="skill-note"><strong>Express.js:</strong> foundational routing, middleware, and REST API structure.</p></article>
+      <article class="skill-group"><div class="skill-group-head"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg><h3>Databases</h3><span class="skill-level">Core + learning</span></div><div class="skill-tags"><span class="tool-chip"><i class="tool-logo devicon-mysql-plain colored" aria-hidden="true"></i>MySQL</span><span class="tool-chip"><i class="tool-logo devicon-mysql-plain colored" aria-hidden="true"></i>MySQLi (PHP)</span><span class="tool-chip"><i class="tool-logo devicon-mongodb-plain colored" aria-hidden="true"></i>MongoDB</span></div><p class="skill-note"><strong>MongoDB:</strong> introductory CRUD with collections and documents.<br><strong>MySQLi:</strong> PHP interface for connecting to MySQL.</p></article>
+      <article class="skill-group"><div class="skill-group-head"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/><path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z"/></svg><h3>AI &amp; other foundations</h3><span class="skill-level">Foundational</span></div><div class="skill-tags"><span class="tool-chip"><i class="tool-logo devicon-python-plain colored" aria-hidden="true"></i>Python</span><span class="tool-chip"><svg class="tool-logo concept-ml" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><circle cx="12" cy="11" r="2.2"/><path d="m6.7 7.3 3.7 2.4m7-2.4-3.7 2.4m-1.3 3.5v2.6"/></svg>Machine Learning</span><span class="tool-chip"><svg class="tool-logo concept-agent" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9L12 2Zm7 13 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z"/></svg>Agentic AI</span><span class="tool-chip"><svg class="tool-logo concept-nlp" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h3l2-6 4 12 3-9 2 3h4"/></svg>NLP</span><span class="tool-chip"><i class="tool-logo devicon-java-plain colored" aria-hidden="true"></i>Java</span></div><p class="skill-note"><strong>Machine Learning:</strong> basic data preparation and simple models.<br><strong>Agentic AI:</strong> agents, tool use, and workflows.<br><strong>NLP:</strong> text processing fundamentals.<br><strong>Java:</strong> syntax and object-oriented basics.</p></article>
+    </div></div><div class="skill-card spoken-card"><div class="label">Spoken languages</div><div class="chips"><span class="chip">English</span><span class="chip">Tagalog</span></div><p class="fine">Spoken languages are listed separately from technical skills.</p></div></div></section>
+    <section class="section about-section" id="about"><div class="about-heading"><div class="label">03 / About me</div><h2>Building for<br><span>the web.</span></h2><p class="about-intro">I’m Alfonso A. Panisales, an Information Technology graduate focused on web and mobile application development.</p></div><div class="about-details"><div class="about-card"><span class="about-index">01</span><div><h3>What I care about</h3><p>I enjoy combining practical problem-solving with thoughtful, user-focused design.</p></div></div><div class="about-card"><span class="about-index">02</span><div><h3>What I work with</h3><p>My experience includes web application development, RESTful API integration, database work, automation, and debugging.</p></div></div><div class="about-card about-open"><span class="open-indicator" aria-hidden="true"></span><p>I’m continuing to grow through hands-on projects and am open to opportunities to contribute and learn with a team.</p></div></div></section>
+    <section class="section education-section" id="education"><div class="section-head"><div><div class="label">04 / Education</div><h2>Where I studied</h2></div><div class="section-note">My academic path in information technology.</div></div><div class="education-grid"><article class="education-card"><div class="education-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11v5c3.5 3 8.5 3 12 0v-5M22 9v6"/></svg></div><div class="education-content"><div class="education-period"><span class="period-dot"></span>2018–2020 <span class="education-level">Senior High School</span></div><h3>CARD-MRI Development Institute</h3><p class="education-place"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>Tranca, Bay, Laguna</p><span class="education-detail">Information and Communications Technology</span></div></article><article class="education-card"><div class="education-mark college-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-4h6v4M8 10h.01M12 10h.01M16 10h.01M8 13h.01M12 13h.01M16 13h.01"/></svg></div><div class="education-content"><div class="education-period"><span class="period-dot"></span>2021–2025 <span class="education-level">College</span></div><h3>Laguna State Polytechnic University</h3><p class="education-place"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="9" r="2.2"/></svg>Los Baños Campus · Malinta, Los Baños, Laguna</p><span class="education-detail">Bachelor of Science in Information Technology</span></div></article></div></section>
+    <section class="section disclosure-section" aria-label="AI tools disclosure"><div class="ai-note"><div class="ai-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z"/><path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z"/></svg></div><div class="ai-copy"><div class="ai-kicker">A note on my process</div><h2>AI is one of the tools I use.</h2><p>Some code in my projects was created with help from AI tools. I review and adapt that code as part of my work, and I’m continuing to build my understanding of what I ship.</p></div><span class="ai-badge">Transparent by design</span></div></section>
+
+    <section class="section contact-section" id="contact"><div class="contact-heading"><div class="label">05 / Contact</div><h2>Get in touch</h2></div><div class="contact"><div><h3>Let’s build something useful.</h3><p>Have an opportunity or want to talk? I’d love to hear from you.</p></div><div class="contact-links"><button class="button email-trigger" id="email-trigger" type="button">Email me ↗</button><a class="button secondary" href="https://www.facebook.com/Pongki23/" target="_blank" rel="noreferrer">Facebook ↗</a><a class="button secondary" href="https://github.com/Pongki69" target="_blank" rel="noopener noreferrer">GitHub profile ↗</a></div></div></section>
+  </main>
+  <footer class="wrap"><span>© 2026 Pongki · Built with curiosity</span><span class="mono">github.com/Pongki69</span></footer>
+  <dialog class="contact-dialog" id="contact-dialog" aria-labelledby="contact-dialog-title">
+    <div class="dialog-head"><div><span class="dialog-kicker">LET’S CONNECT</span><h2 id="contact-dialog-title">Send me a message</h2></div><button class="dialog-close" type="button" id="contact-close" aria-label="Close contact dialog">×</button></div>
+    <p>Fill in a message and Gmail will open a draft addressed to me. Review it there, then send it from your Gmail account.</p>
+    <p class="attachment-hint">Need to include a photo or file? Attach it in Gmail after the draft opens.</p>
+    <form class="email-form" id="email-form">
+      <div class="email-form-row"><label>Your name<input name="senderName" type="text" autocomplete="name" placeholder="Your name"></label></div>
+      <label>Subject<input name="subject" type="text" required maxlength="120" placeholder="What would you like to discuss?"></label>
+      <label>Message<textarea name="message" required rows="4" placeholder="Write your message..."></textarea></label>
+      <div class="email-form-footer"><span class="email-recipient">To <strong>panisales.alfonso.arc@gmail.com</strong></span><button class="button" type="submit">Continue in Gmail <span aria-hidden="true">↗</span></button></div>
+      <p class="email-form-status" id="email-form-status" role="status" aria-live="polite"></p>
+    </form>
+    <div class="dialog-social"><span>Prefer social?</span><a href="https://www.facebook.com/Pongki23/" target="_blank" rel="noopener noreferrer">Visit my Facebook ↗</a></div>
+  </dialog>
+  <aside class="music-panel" id="music-panel" aria-label="Background music controls">
+    <div class="music-panel-head"><span>Background music</span><span class="music-panel-tools"><span class="music-bars" aria-hidden="true"><i></i><i></i><i></i></span><button class="music-play-pause" id="music-play-pause" type="button" aria-label="Pause background music" title="Pause background music">Ⅱ</button><button class="music-panel-close" id="music-panel-close" type="button" aria-label="Close music controls">×</button></span></div>
+    <p class="music-hint" id="music-hint" role="status" aria-live="polite">Music starts after your first click or key press.</p>
+    <label class="volume-label" for="music-volume"><span>Volume</span><output id="music-volume-value" for="music-volume">35%</output></label>
+    <input class="volume-slider" id="music-volume" type="range" min="0" max="100" step="1" value="35" aria-label="Background music volume" aria-valuetext="35%">
+  </aside>
+  <audio id="bg-music" src="bgmusic.mp3" loop preload="auto" hidden></audio>
+  <dialog class="gallery-viewer" id="gallery-viewer" aria-label="Project screenshot viewer">
+    <div class="gallery-viewer-shell">
+      <header class="gallery-viewer-header"><div><strong id="gallery-viewer-title">Project tour</strong><span id="gallery-viewer-pagination" aria-live="polite"></span></div><button class="gallery-viewer-close" type="button" aria-label="Close gallery">×</button></header>
+      <button class="gallery-viewer-nav gallery-viewer-prev" type="button" aria-label="Previous screenshot">‹</button>
+      <figure class="gallery-viewer-figure"><img id="gallery-viewer-image" alt=""><figcaption id="gallery-viewer-caption"></figcaption></figure>
+      <button class="gallery-viewer-nav gallery-viewer-next" type="button" aria-label="Next screenshot">›</button>
+      <p class="gallery-viewer-hint">Use ← and → to browse, or press Esc to close.</p>
+    </div>
+  </dialog>
+  <script>
+    const pageSkeleton = document.querySelector('.page-skeleton');
+    let skeletonDismissed = false;
+    function dismissPageSkeleton() {
+      if (skeletonDismissed) return;
+      skeletonDismissed = true;
+      pageSkeleton?.classList.add('is-dismissing');
+      document.documentElement.classList.remove('is-loading');
+      window.setTimeout(() => pageSkeleton?.remove(), 320);
+    }
+    window.addEventListener('load', () => {
+      const elapsed = performance.now() - (window.__portfolioLoadStarted || 0);
+      window.setTimeout(dismissPageSkeleton, Math.max(0, 360 - elapsed));
+    }, { once: true });
+    window.setTimeout(dismissPageSkeleton, 6500);
+
+    const mobileMenuToggle = document.querySelector('#mobile-menu-toggle');
+    const mobileNav = document.querySelector('#mobile-nav');
+    const mobileNavClose = document.querySelector('#mobile-nav-close');
+    const mobileNavBackdrop = document.querySelector('#mobile-nav-backdrop');
+    function setMobileNavOpen(isOpen) {
+      document.body.classList.toggle('mobile-nav-open', isOpen);
+      mobileMenuToggle.setAttribute('aria-expanded', String(isOpen));
+      if (isOpen) mobileNavClose.focus();
+      else mobileMenuToggle.focus();
+    }
+    mobileMenuToggle.addEventListener('click', () => {
+      setMobileNavOpen(mobileMenuToggle.getAttribute('aria-expanded') !== 'true');
+    });
+    mobileNavClose.addEventListener('click', () => setMobileNavOpen(false));
+    mobileNavBackdrop.addEventListener('click', () => setMobileNavOpen(false));
+    mobileNav.querySelectorAll('.nav-links a').forEach((link) => {
+      link.addEventListener('click', () => {
+        setMobileNavOpen(false);
+      });
+    });
+    document.addEventListener('keydown', (event) => {
+      if (!document.body.classList.contains('mobile-nav-open')) return;
+      if (event.key === 'Escape') {
+        setMobileNavOpen(false);
+        return;
+      }
+      if (event.key === 'Tab') {
+        const focusable = [...mobileNav.querySelectorAll('a[href], button:not([disabled])')];
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    const contactTrigger = document.querySelector('#contact-trigger');
+    const contactDialog = document.querySelector('#contact-dialog');
+    const contactClose = document.querySelector('#contact-close');
+    const emailTrigger = document.querySelector('#email-trigger');
+    const emailForm = document.querySelector('#email-form');
+    const emailFormStatus = document.querySelector('#email-form-status');
+    contactTrigger.addEventListener('click', () => contactDialog.showModal());
+    emailTrigger.addEventListener('click', () => contactDialog.showModal());
+    emailForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(emailForm);
+      const name = String(formData.get('senderName') || '').trim();
+      const subject = String(formData.get('subject') || '').trim();
+      const message = String(formData.get('message') || '').trim();
+      const signature = name ? 'From: ' + name : '';
+      const bodyText = message + (signature ? '\n\n' + signature : '');
+      const gmailCompose = new URL('https://mail.google.com/mail/u/0/');
+      gmailCompose.search = new URLSearchParams({ view: 'cm', to: 'panisales.alfonso.arc@gmail.com', su: subject, body: bodyText }).toString();
+      window.open(gmailCompose.toString(), '_blank', 'noopener,noreferrer');
+      emailFormStatus.textContent = 'Gmail should open in a new tab. Review your draft and press Send. If it does not open, allow pop-ups and try again.';
+      emailFormStatus.classList.remove('is-error', 'is-success');
+    });
+    contactClose.addEventListener('click', () => contactDialog.close());
+    contactDialog.addEventListener('click', (event) => {
+      if (event.target === contactDialog) contactDialog.close();
+    });
+
+    const themeToggle = document.querySelector('#theme-toggle');
+    const themeLabel = document.querySelector('.theme-toggle-label');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function applyTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+      const isDark = theme === 'dark';
+      themeToggle.setAttribute('aria-label', `Switch to ${isDark ? 'light' : 'dark'} mode`);
+      themeToggle.title = `Switch to ${isDark ? 'light' : 'dark'} mode`;
+      themeLabel.textContent = isDark ? 'Light' : 'Dark';
+    }
+
+    let savedTheme = null;
+    try { savedTheme = localStorage.getItem('portfolio-theme'); } catch {}
+    applyTheme(savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : 'dark');
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+      try { localStorage.setItem('portfolio-theme', nextTheme); } catch {}
+    });
+
+    const musicToggle = document.querySelector('#music-toggle');
+    const musicLabel = document.querySelector('#music-label');
+    const musicPanel = document.querySelector('#music-panel');
+    const musicHint = document.querySelector('#music-hint');
+    const backgroundMusic = document.querySelector('#bg-music');
+    const musicVolume = document.querySelector('#music-volume');
+    const musicVolumeValue = document.querySelector('#music-volume-value');
+    const musicPlayPause = document.querySelector('#music-play-pause');
+    const musicPanelClose = document.querySelector('#music-panel-close');
+    let musicPanelDismissed = true;
+
+    let savedMusicVolume = 35;
+    try {
+      const storedVolume = Number(localStorage.getItem('portfolio-music-volume'));
+      if (Number.isFinite(storedVolume)) savedMusicVolume = Math.max(0, Math.min(100, storedVolume));
+    } catch {}
+    musicVolume.value = String(savedMusicVolume);
+    musicVolume.style.setProperty('--volume-level', savedMusicVolume + '%');
+    backgroundMusic.volume = savedMusicVolume / 100;
+    musicVolumeValue.value = savedMusicVolume + '%';
+    musicVolume.setAttribute('aria-valuetext', savedMusicVolume + '%');
+    musicVolume.addEventListener('input', () => {
+      const percentage = Number(musicVolume.value);
+      backgroundMusic.volume = percentage / 100;
+      musicVolumeValue.value = percentage + '%';
+      musicVolume.style.setProperty('--volume-level', percentage + '%');
+      musicVolume.setAttribute('aria-valuetext', percentage + '%');
+      try { localStorage.setItem('portfolio-music-volume', String(percentage)); } catch {}
+    });
+
+    musicPanelClose.addEventListener('click', () => {
+      musicPanelDismissed = true;
+      musicPanel.classList.remove('is-visible');
+    });
+
+    musicPlayPause.addEventListener('click', () => {
+      musicPanelDismissed = false;
+      musicPanel.classList.add('is-visible');
+      if (backgroundMusic.paused) {
+        backgroundMusic.play().catch(() => {
+          setMusicState(false);
+          musicHint.textContent = 'The soundtrack could not start. Check that bgmusic.mp3 is beside this page, then try again.';
+        });
+      } else {
+        backgroundMusic.pause();
+      }
+    });
+
+    function startMusicFromGesture() {
+      if (!backgroundMusic.paused) return;
+      backgroundMusic.play().catch(() => {
+        musicPanelDismissed = true;
+        setMusicState(false);
+        musicHint.textContent = 'Music could not start. Use the music button to try again.';
+        musicPanel.classList.remove('is-visible');
+      });
+    }
+
+    function setMusicState(isOn) {
+      musicToggle.setAttribute('aria-pressed', String(isOn));
+      musicToggle.setAttribute('aria-label', isOn ? 'Turn background music off' : 'Turn background music on');
+      musicLabel.textContent = isOn ? 'Music on' : 'Music off';
+      musicPlayPause.textContent = isOn ? 'Ⅱ' : '▶';
+      musicPlayPause.setAttribute('aria-label', isOn ? 'Pause background music' : 'Play background music');
+      musicPlayPause.title = isOn ? 'Pause background music' : 'Play background music';
+      musicPanel.classList.toggle('is-visible', isOn || !musicPanelDismissed);
+      musicHint.textContent = isOn ? 'Now playing from your local soundtrack.' : 'Background music is paused.';
+    }
+
+    musicToggle.addEventListener('click', () => {
+      musicPanelDismissed = false;
+      musicPanel.classList.add('is-visible');
+      if (backgroundMusic.paused) {
+        backgroundMusic.play().catch(() => {
+          setMusicState(false);
+          musicHint.textContent = 'The soundtrack could not start. Check that bgmusic.mp3 is beside this page, then try again.';
+          musicPanel.classList.add('is-visible');
+        });
+      } else {
+        backgroundMusic.pause();
+      }
+    });
+
+    // Start only after a real visitor gesture; browsers reject audible autoplay on page load.
+    function handleFirstInteraction(event) {
+      const eventPath = event.composedPath();
+      if (eventPath.includes(musicToggle) || eventPath.includes(musicVolume) || eventPath.includes(musicPanelClose) || eventPath.includes(musicPlayPause)) return;
+      startMusicFromGesture();
+      document.removeEventListener('pointerdown', handleFirstInteraction, true);
+      document.removeEventListener('keydown', handleFirstInteraction, true);
+    }
+    document.addEventListener('pointerdown', handleFirstInteraction, true);
+    document.addEventListener('keydown', handleFirstInteraction, true);
+
+    backgroundMusic.addEventListener('play', () => setMusicState(true));
+    backgroundMusic.addEventListener('pause', () => setMusicState(false));
+    backgroundMusic.addEventListener('error', () => {
+      setMusicState(false);
+      musicHint.textContent = 'The soundtrack could not be loaded. Check that bgmusic.mp3 is beside this page.';
+      if (!musicPanelDismissed) musicPanel.classList.add('is-visible');
+    });
+
+    musicHint.textContent = 'Music starts after your first click or key press. Use the header button to pause or resume it.';
+
+
+    // Project galleries open in an accessible, swipeable viewer. Long galleries paginate their thumbnails.
+    const galleryDialog = document.getElementById('gallery-viewer');
+    const galleryImage = document.getElementById('gallery-viewer-image');
+    const galleryCaption = document.getElementById('gallery-viewer-caption');
+    const galleryPagination = document.getElementById('gallery-viewer-pagination');
+    const galleryTitle = document.getElementById('gallery-viewer-title');
+    let activeGalleryItems = [];
+    let activeGalleryIndex = 0;
+    let touchStartX = 0;
+
+    function showGalleryImage(index) {
+      if (!activeGalleryItems.length) return;
+      activeGalleryIndex = (index + activeGalleryItems.length) % activeGalleryItems.length;
+      const item = activeGalleryItems[activeGalleryIndex];
+      const thumbnail = item.querySelector('img');
+      galleryImage.src = item.href;
+      galleryImage.alt = thumbnail?.alt || item.textContent.trim();
+      galleryCaption.textContent = item.querySelector('span')?.textContent.trim() || thumbnail?.alt || '';
+      galleryPagination.textContent = `${activeGalleryIndex + 1} / ${activeGalleryItems.length}`;
+    }
+
+    document.querySelectorAll('.project-gallery').forEach((gallery) => {
+      const grid = gallery.querySelector('.project-gallery-grid');
+      const items = [...grid.querySelectorAll('a')];
+      const pageSize = 6;
+      if (items.length > pageSize) {
+        const pager = document.createElement('nav');
+        pager.className = 'project-gallery-pager';
+        pager.setAttribute('aria-label', 'Gallery pages');
+        grid.after(pager);
+        let page = 0;
+        const pageCount = Math.ceil(items.length / pageSize);
+        const renderPage = () => {
+          items.forEach((item, index) => item.hidden = Math.floor(index / pageSize) !== page);
+          pager.replaceChildren();
+          for (let p = 0; p < pageCount; p += 1) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = String(p + 1);
+            button.setAttribute('aria-label', `Show gallery page ${p + 1}`);
+            button.setAttribute('aria-current', String(p === page));
+            button.addEventListener('click', () => { page = p; renderPage(); });
+            pager.append(button);
+          }
+        };
+        renderPage();
+      }
+      items.forEach((item) => item.addEventListener('click', (event) => {
+        event.preventDefault();
+        activeGalleryItems = items;
+        galleryTitle.textContent = gallery.querySelector('summary')?.textContent.replace(/^▾?\s*/, '').replace(/\s*·\s*\d+\s+screens?$/i, '') || 'Project tour';
+        showGalleryImage(items.indexOf(item));
+        galleryDialog.showModal();
+      }));
+    });
+
+    galleryDialog.querySelector('.gallery-viewer-close').addEventListener('click', () => galleryDialog.close());
+    galleryDialog.querySelector('.gallery-viewer-prev').addEventListener('click', () => showGalleryImage(activeGalleryIndex - 1));
+    galleryDialog.querySelector('.gallery-viewer-next').addEventListener('click', () => showGalleryImage(activeGalleryIndex + 1));
+    galleryDialog.addEventListener('click', (event) => {
+      if (!event.target.closest('.gallery-viewer-figure, .gallery-viewer-header, .gallery-viewer-nav')) galleryDialog.close();
+    });
+    galleryDialog.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') showGalleryImage(activeGalleryIndex - 1);
+      if (event.key === 'ArrowRight') showGalleryImage(activeGalleryIndex + 1);
+    });
+    galleryDialog.addEventListener('touchstart', (event) => { touchStartX = event.changedTouches[0].screenX; }, { passive: true });
+    galleryDialog.addEventListener('touchend', (event) => {
+      const delta = event.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(delta) > 45) showGalleryImage(activeGalleryIndex + (delta < 0 ? 1 : -1));
+    }, { passive: true });
+    // Reveal content as it enters view, while leaving the page fully readable without JavaScript support.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduceMotion && 'IntersectionObserver' in window) {
+      document.documentElement.classList.add('motion-ready');
+      const revealItems = document.querySelectorAll('.section-head, .project, .skill-card, .about-heading, .about-card, .education-card, .ai-note, .contact');
+      revealItems.forEach((item, index) => {
+        item.classList.add('reveal-on-scroll');
+        item.style.setProperty('--reveal-delay', `${Math.min(index % 4, 3) * 70}ms`);
+      });
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -36px 0px' });
+      revealItems.forEach((item) => revealObserver.observe(item));
+    }
+  </script>
+</body>
+</html>
+

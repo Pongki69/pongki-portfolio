@@ -1,3 +1,5 @@
 tmp/
 __pycache__/
 *.py[cod]
+replace-photo/*
+!replace-photo/README.txt

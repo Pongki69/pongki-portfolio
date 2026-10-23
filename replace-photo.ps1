@@ -14,6 +14,7 @@ $photoDirectory = Join-Path $repoRoot 'replace-photo'
 $destination = Join-Path $repoRoot 'graduation-photo.png'
 $temporaryImage = Join-Path $repoRoot 'graduation-photo-new.png'
 $supportedExtensions = @('.jpg', '.jpeg', '.png', '.bmp', '.gif')
+$avatarPixelSize = 880
 
 if (-not (Test-Path -LiteralPath (Join-Path $repoRoot '.git'))) {
   throw 'This folder is not a Git repository.'
@@ -48,6 +49,7 @@ if ($LASTEXITCODE -ne 0) {
 Add-Type -AssemblyName System.Drawing
 $image = $null
 $bitmap = $null
+$graphics = $null
 try {
   $image = [System.Drawing.Image]::FromFile($photos[0].FullName)
   if ($image.PropertyIdList -contains 0x0112) {
@@ -62,10 +64,22 @@ try {
       8 { $image.RotateFlip([System.Drawing.RotateFlipType]::Rotate270FlipNone) }
     }
   }
-  $bitmap = [System.Drawing.Bitmap]::new($image)
+  $cropSize = [Math]::Min($image.Width, $image.Height)
+  $cropX = [int][Math]::Floor(($image.Width - $cropSize) / 2)
+  $cropY = [int][Math]::Floor(($image.Height - $cropSize) / 2)
+  $sourceBounds = [System.Drawing.Rectangle]::new($cropX, $cropY, $cropSize, $cropSize)
+  $targetBounds = [System.Drawing.Rectangle]::new(0, 0, $avatarPixelSize, $avatarPixelSize)
+  $bitmap = [System.Drawing.Bitmap]::new($avatarPixelSize, $avatarPixelSize, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+  $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+  $graphics.CompositingQuality = [System.Drawing.Drawing2D.CompositingQuality]::HighQuality
+  $graphics.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic
+  $graphics.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality
+  $graphics.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
+  $graphics.DrawImage($image, $targetBounds, $sourceBounds, [System.Drawing.GraphicsUnit]::Pixel)
   $bitmap.Save($temporaryImage, [System.Drawing.Imaging.ImageFormat]::Png)
 }
 finally {
+  if ($graphics) { $graphics.Dispose() }
   if ($bitmap) { $bitmap.Dispose() }
   if ($image) { $image.Dispose() }
 }

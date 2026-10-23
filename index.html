@@ -377,6 +377,9 @@
       const delta = event.changedTouches[0].screenX - touchStartX;
       if (Math.abs(delta) > 45) showGalleryImage(activeGalleryIndex + (delta < 0 ? 1 : -1));
     }, { passive: true });
+    // Keep page elements from starting the browser's native drag behavior.
+    document.addEventListener('dragstart', (event) => event.preventDefault());
+
     // Reveal content as it enters view, while leaving the page fully readable without JavaScript support.
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!reduceMotion && 'IntersectionObserver' in window) {

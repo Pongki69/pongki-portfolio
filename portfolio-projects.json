@@ -1,0 +1,59 @@
+{
+  "owner": "Pongki69",
+  "projects": [
+    {
+      "name": "PageAtlas",
+      "description": "",
+      "url": "https://github.com/Pongki69/PageAtlas",
+      "liveUrl": "https://page-atlas.vercel.app",
+      "language": "TypeScript",
+      "stars": 0,
+      "status": "github"
+    },
+    {
+      "name": "Aetheria",
+      "description": "",
+      "url": "https://github.com/Pongki69/Aetheria",
+      "liveUrl": "",
+      "language": "TypeScript",
+      "stars": 0,
+      "status": "in-progress"
+    },
+    {
+      "name": "DineFlow",
+      "description": "",
+      "url": "https://github.com/Pongki69/DineFlow",
+      "liveUrl": "https://dineflow-wp77.onrender.com/",
+      "language": "JavaScript",
+      "stars": 0,
+      "status": "in-progress"
+    },
+    {
+      "name": "CatalystHub",
+      "description": "",
+      "url": "https://github.com/Pongki69/CatalystHub",
+      "liveUrl": "https://catalyst-hub-beryl.vercel.app/",
+      "language": "TypeScript",
+      "stars": 0,
+      "status": "live"
+    },
+    {
+      "name": "youtube-thumbnail-enhancer",
+      "description": "Tampermonkey script that forces max resolution thumbnails and avatars on YouTube",
+      "url": "https://github.com/Pongki69/youtube-thumbnail-enhancer",
+      "liveUrl": "",
+      "language": "JavaScript",
+      "stars": 0,
+      "status": "github"
+    },
+    {
+      "name": "Event-Horizon",
+      "description": "An all-in-one web app designed to track events and banners across popular gacha games, including Genshin Impact, Honkai: Star Rail, Zenless Zone Zero, and Wuthering Waves. Stay updated, plan your pulls, and never miss limited-time content.",
+      "url": "https://github.com/Pongki69/Event-Horizon",
+      "liveUrl": "https://event-horizon-gray.vercel.app/",
+      "language": "HTML",
+      "stars": 0,
+      "status": "live"
+    }
+  ]
+}

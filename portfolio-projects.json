@@ -2,8 +2,17 @@
   "owner": "Pongki69",
   "projects": [
     {
-      "name": "PageAtlas",
+      "name": "OmniDeck",
       "description": "",
+      "url": "https://github.com/Pongki69/OmniDeck",
+      "liveUrl": "",
+      "language": "C#",
+      "stars": 0,
+      "status": "github"
+    },
+    {
+      "name": "PageAtlas",
+      "description": "Capture any website or web app as a visual design review: full-page and mobile scroll screenshots, linked-page exploration, a page structure map, and offline HTML or PDF export.",
       "url": "https://github.com/Pongki69/PageAtlas",
       "liveUrl": "https://page-atlas.vercel.app",
       "language": "TypeScript",
@@ -53,7 +62,7 @@
       "liveUrl": "https://event-horizon-gray.vercel.app/",
       "language": "HTML",
       "stars": 0,
-      "status": "live"
+      "status": "in-progress"
     }
   ]
 }

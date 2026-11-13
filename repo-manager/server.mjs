@@ -161,8 +161,10 @@ async function publishProjectSettings(request, response) {
     const nextContent = `${JSON.stringify(settings, null, 2)}\n`;
     const previousContent = await readFile(configPath, 'utf8').catch(() => '');
     const changed = previousContent !== nextContent;
+    const { stdout: configChanges } = await git(['diff', '--name-only', '--', 'portfolio-projects.json']);
+    const hasPendingConfig = configChanges.split(/\r?\n/).includes('portfolio-projects.json');
 
-    if (changed) {
+    if (changed || hasPendingConfig) {
       await writeFile(configPath, nextContent, 'utf8');
       const iconFiles = await readdir(iconDirectory).catch(() => []);
       await git(['add', '--', 'portfolio-projects.json', ...(iconFiles.length ? ['assets/project-icons'] : [])]);
@@ -208,7 +210,7 @@ const server = createServer(async (request, response) => {
   }
 
   if (request.method === 'GET' && requestUrl.pathname === '/api/version') {
-    sendJson(response, 200, { backend: 'node-git-worker' });
+    sendJson(response, 200, { backend: 'node-git-worker-retry' });
     return;
   }
 

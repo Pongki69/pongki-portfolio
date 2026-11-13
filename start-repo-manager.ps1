@@ -11,10 +11,19 @@ try {
     if ($workerListener) {
         try {
             $workerVersion = Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/version' -TimeoutSec 1
-            if ($workerVersion.backend -ne 'powershell-native') {
+            if ($workerVersion.backend -ne 'powershell-native-manager-retry2') {
                 Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/shutdown' -Method Post -Headers @{ Origin = 'http://127.0.0.1:4179' } -TimeoutSec 2 | Out-Null
-                Start-Sleep -Milliseconds 300
-                $workerListener = Get-NetTCPConnection -LocalPort 4181 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+                for ($attempt = 0; $attempt -lt 20; $attempt += 1) {
+                    Start-Sleep -Milliseconds 150
+                    $workerListener = Get-NetTCPConnection -LocalPort 4181 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+                    if (-not $workerListener) { break }
+                }
+                if ($workerListener) {
+                    Stop-Process -Id $workerListener.OwningProcess -Force -ErrorAction SilentlyContinue
+                    Start-Sleep -Milliseconds 250
+                    $workerListener = Get-NetTCPConnection -LocalPort 4181 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+                    if ($workerListener) { throw 'The old local Git helper did not stop. Close it, then run this launcher again.' }
+                }
             }
         } catch { throw 'Port 4181 is in use by another app. Close it, then run this launcher again.' }
     }
@@ -23,7 +32,7 @@ try {
     }
     $workerReady = $false
     for ($attempt = 0; $attempt -lt 20; $attempt += 1) {
-        try { $worker = Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/version' -TimeoutSec 1; if ($worker.backend -eq 'powershell-native') { $workerReady = $true; break } } catch { Start-Sleep -Milliseconds 250 }
+        try { $worker = Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/version' -TimeoutSec 1; if ($worker.backend -eq 'powershell-native-manager-retry2') { $workerReady = $true; break } } catch { Start-Sleep -Milliseconds 250 }
     }
     if (-not $workerReady) { throw 'The local Git helper did not start on port 4181.' }
 
@@ -32,10 +41,19 @@ try {
     if ($existingListener) {
         try {
             $version = Invoke-RestMethod -Uri 'http://127.0.0.1:4179/api/version' -TimeoutSec 1
-            if ($version.backend -ne 'node-git-worker') {
+            if ($version.backend -ne 'node-git-worker-retry') {
                 Invoke-RestMethod -Uri 'http://127.0.0.1:4179/api/shutdown' -Method Post -Headers @{ Origin = 'http://127.0.0.1:4179' } -TimeoutSec 2 | Out-Null
-                Start-Sleep -Milliseconds 400
-                $existingListener = Get-NetTCPConnection -LocalPort 4179 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+                for ($attempt = 0; $attempt -lt 20; $attempt += 1) {
+                    Start-Sleep -Milliseconds 150
+                    $existingListener = Get-NetTCPConnection -LocalPort 4179 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+                    if (-not $existingListener) { break }
+                }
+                if ($existingListener) {
+                    Stop-Process -Id $existingListener.OwningProcess -Force -ErrorAction SilentlyContinue
+                    Start-Sleep -Milliseconds 250
+                    $existingListener = Get-NetTCPConnection -LocalPort 4179 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+                    if ($existingListener) { throw 'The old project manager did not stop. Close it, then run this launcher again.' }
+                }
             }
         } catch { throw 'Port 4179 is in use by another app. Close it, then run this launcher again.' }
     }

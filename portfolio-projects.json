@@ -2,11 +2,20 @@
   "owner": "Pongki69",
   "projects": [
     {
+      "name": "OmniDrop",
+      "description": "",
+      "url": "https://github.com/Pongki69/OmniDrop",
+      "liveUrl": "",
+      "language": "Dart",
+      "stars": 0,
+      "status": "github"
+    },
+    {
       "name": "OmniDeck",
       "description": "",
       "url": "https://github.com/Pongki69/OmniDeck",
       "liveUrl": "",
-      "language": "C#",
+      "language": "Kotlin",
       "stars": 0,
       "status": "github"
     },

@@ -4,7 +4,13 @@
   const iconSource = (project) => {
     const path=String(project.icon||'').trim();
     if(!path)return null;
-    if(/^https:\/\//i.test(path))return safe(path)?.href||null;
+    if(/^https?:\/\//i.test(path)){
+      const linked=safe(path);
+      if(!linked)return null;
+      const match=linked.hostname==='github.com'&&linked.pathname.match(/^\/([^/]+)\/([^/]+)\/(?:blob|raw)\/([^/]+)\/(.+)$/);
+      if(match)return `https://raw.githubusercontent.com/${encodeURIComponent(match[1])}/${encodeURIComponent(match[2])}/${encodeURIComponent(match[3])}/${match[4].split('/').map(encodeURIComponent).join('/')}`;
+      return linked.href;
+    }
     const relative=path.replace(/\\/g,'/').replace(/^\/+/,''),parts=relative.split('/').filter(Boolean);
     if(!parts.length||parts.some(part=>part==='.'||part==='..'))return null;
     if(relative.startsWith('assets/project-icons/'))return safe(relative)?.href||null;

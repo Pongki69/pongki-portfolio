@@ -206,7 +206,7 @@
       ],
       "stars": 0,
       "status": "live",
-      "icon": "/public/favicon.svg",
+      "icon": "/client/public/favicon.svg",
       "category": "Web development",
       "meta": [
         {

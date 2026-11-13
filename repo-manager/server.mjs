@@ -154,7 +154,11 @@ async function publishProjectSettings(request, response) {
     if (branch.trim() !== 'main') throw new Error('Switch the portfolio checkout to the main branch, then reopen this manager.');
 
     const { stdout: stagedFiles } = await git(['diff', '--cached', '--name-only']);
-    if (stagedFiles.trim()) throw new Error('There are already staged changes in this checkout. Commit or unstage them before publishing project settings.');
+    const stagedList = stagedFiles.split(/\r?\n/).filter(Boolean);
+    const projectFileOnly = (file) => file === 'portfolio-projects.json' || file.startsWith('assets/project-icons/');
+    if (stagedList.some((file) => !projectFileOnly(file))) {
+      throw new Error('Other files are staged in this checkout. Commit or unstage those files before publishing project settings.');
+    }
 
     const repositories = await getPublicRepositories(true);
     const settings = projectFile(repositories, body.statuses, JSON.parse(await readFile(configPath, 'utf8')));
@@ -163,8 +167,9 @@ async function publishProjectSettings(request, response) {
     const changed = previousContent !== nextContent;
     const { stdout: configChanges } = await git(['diff', '--name-only', '--', 'portfolio-projects.json']);
     const hasPendingConfig = configChanges.split(/\r?\n/).includes('portfolio-projects.json');
+    const hasPendingProjectChanges = stagedList.length > 0 || hasPendingConfig;
 
-    if (changed || hasPendingConfig) {
+    if (changed || hasPendingProjectChanges) {
       await writeFile(configPath, nextContent, 'utf8');
       const iconFiles = await readdir(iconDirectory).catch(() => []);
       await git(['add', '--', 'portfolio-projects.json', ...(iconFiles.length ? ['assets/project-icons'] : [])]);

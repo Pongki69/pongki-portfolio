@@ -510,6 +510,15 @@ body { background: radial-gradient(ellipse at 88% 4%, #e9e4d5 0, transparent 32%
 .project-icon.violet { color: #181919; background: #e5f64d; }
 .project-icon.orange { color: #fff8eb; background: #e34c42; filter: drop-shadow(4px 4px 0 #e5f64d); }
 .project-icon:not(.violet):not(.orange) { color: #132126; background: #62d8dc; filter: drop-shadow(4px 4px 0 #e34c42); }
+/* Uploaded repository logos should keep their own colors and transparent edges. */
+img.project-icon.github-project-icon {
+  background: transparent;
+  clip-path: none;
+  filter: none;
+  object-fit: contain;
+  transform: none;
+}
+.project:hover img.project-icon.github-project-icon { transform: none; }
 .education-mark, .ai-icon {
   clip-path: polygon(0 0, 78% 0, 100% 22%, 100% 100%, 18% 100%, 0 82%);
   border-radius: 4px;

@@ -38,7 +38,7 @@
     {
       "name": "OmniDeck",
       "title": "OmniDeck",
-      "description": "Stream Windows PC games to an Android phone over your local network. Play with customizable touch controls or a physical gamepad.",
+      "description": "OmniDeck lets you play your PC games on an Android phone while the game runs on Windows. The host captures and streams video and audio to the phone, and the Android app sends your inputs back to the PC. Players can customize the on-screen layout for each game or use a physical gamepad.",
       "url": "https://github.com/Pongki69/OmniDeck",
       "liveUrl": "",
       "language": "Kotlin",

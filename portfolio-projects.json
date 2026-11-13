@@ -120,12 +120,12 @@
       "category": "3D workspace · AI workforce",
       "meta": [
         {
-          "value": "Shared spatial 3D environment",
-          "label": "Workspace"
+          "label": "Workspace",
+          "value": "Shared spatial 3D environment"
         },
         {
-          "value": "Custom agents, model imports, conversations, animation",
-          "label": "Tools"
+          "label": "Tools",
+          "value": "Custom agents, model imports, conversations, animation"
         }
       ],
       "storyEnabled": true,
@@ -138,10 +138,10 @@
       "statusFlowTitle": "Project status",
       "statusSteps": [],
       "noteEnabled": false,
-      "noteTitle": "",
+      "noteTitle": "Highlight",
       "note": "",
       "galleryEnabled": false,
-      "galleryTitle": "",
+      "galleryTitle": "Explore project",
       "gallery": [],
       "livePreviewEnabled": false
     },
@@ -165,12 +165,12 @@
       "category": "Restaurant management · Reservations",
       "meta": [
         {
-          "value": "Design restaurant floor plans in 2D and preview them in 3D",
-          "label": "Standout feature"
+          "label": "Standout feature",
+          "value": "Design restaurant floor plans in 2D and preview them in 3D"
         },
         {
-          "value": "React 19 · Laravel 13 · PostgreSQL 17 · Three.js",
-          "label": "Stack"
+          "label": "Stack",
+          "value": "React 19 · Laravel 13 · PostgreSQL 17 · Three.js"
         }
       ],
       "storyEnabled": true,
@@ -183,10 +183,10 @@
       "statusFlowTitle": "Project status",
       "statusSteps": [],
       "noteEnabled": false,
-      "noteTitle": "",
+      "noteTitle": "Highlight",
       "note": "",
       "galleryEnabled": false,
-      "galleryTitle": "",
+      "galleryTitle": "Explore project",
       "gallery": [],
       "livePreviewEnabled": false
     },
@@ -206,16 +206,16 @@
       ],
       "stars": 0,
       "status": "live",
-      "icon": "",
+      "icon": "/public/favicon.svg",
       "category": "Web development",
       "meta": [
         {
-          "value": "MongoDB · Express.js · React · Node.js",
-          "label": "Stack"
+          "label": "Stack",
+          "value": "MongoDB · Express.js · React · Node.js"
         },
         {
-          "value": "Submit, compare proposals, select, track",
-          "label": "Client flow"
+          "label": "Client flow",
+          "value": "Submit, compare proposals, select, track"
         }
       ],
       "storyEnabled": false,
@@ -317,10 +317,10 @@
       "statusFlowTitle": "Project status",
       "statusSteps": [],
       "noteEnabled": false,
-      "noteTitle": "",
+      "noteTitle": "Highlight",
       "note": "",
       "galleryEnabled": false,
-      "galleryTitle": "",
+      "galleryTitle": "Explore project",
       "gallery": [],
       "livePreviewEnabled": false
     },
@@ -341,16 +341,16 @@
       ],
       "stars": 0,
       "status": "in-progress",
-      "icon": "",
+      "icon": "/public/favicon.png",
       "category": "Web automation",
       "meta": [
         {
-          "value": "Genshin Impact, Honkai: Star Rail, Zenless Zone Zero, and Wuthering Waves",
-          "label": "Coverage"
+          "label": "Coverage",
+          "value": "Genshin Impact, Honkai: Star Rail, Zenless Zone Zero, and Wuthering Waves"
         },
         {
-          "value": "Puppeteer + scheduled GitHub Actions",
-          "label": "Automation"
+          "label": "Automation",
+          "value": "Puppeteer + scheduled GitHub Actions"
         }
       ],
       "storyEnabled": true,
@@ -363,7 +363,7 @@
       "statusFlowTitle": "Project status",
       "statusSteps": [],
       "noteEnabled": false,
-      "noteTitle": "",
+      "noteTitle": "Highlight",
       "note": "",
       "galleryEnabled": true,
       "galleryTitle": "Explore Event Horizon",

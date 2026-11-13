@@ -37,7 +37,7 @@ try {
 
     if ($Mode -eq 'stop') {
         $managerStopped = Stop-PortfolioService 4179 'node-git-worker-retry'
-        $workerStopped = Stop-PortfolioService 4181 'powershell-native-manager-retry3'
+        $workerStopped = Stop-PortfolioService 4181 'powershell-native-manager-retry4'
         if ($managerStopped -or $workerStopped) {
             Write-Host 'The portfolio project manager service has stopped.' -ForegroundColor Green
         } else {
@@ -50,7 +50,7 @@ try {
     if ($workerListener) {
         try {
             $workerVersion = Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/version' -TimeoutSec 1
-            if ($workerVersion.backend -ne 'powershell-native-manager-retry3') {
+            if ($workerVersion.backend -ne 'powershell-native-manager-retry4') {
                 Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/shutdown' -Method Post -Headers @{ Origin = 'http://127.0.0.1:4179' } -TimeoutSec 2 | Out-Null
                 for ($attempt = 0; $attempt -lt 20; $attempt += 1) {
                     Start-Sleep -Milliseconds 150
@@ -71,7 +71,7 @@ try {
     }
     $workerReady = $false
     for ($attempt = 0; $attempt -lt 20; $attempt += 1) {
-        try { $worker = Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/version' -TimeoutSec 1; if ($worker.backend -eq 'powershell-native-manager-retry3') { $workerReady = $true; break } } catch { Start-Sleep -Milliseconds 250 }
+        try { $worker = Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/version' -TimeoutSec 1; if ($worker.backend -eq 'powershell-native-manager-retry4') { $workerReady = $true; break } } catch { Start-Sleep -Milliseconds 250 }
     }
     if (-not $workerReady) { throw 'The local Git helper did not start on port 4181.' }
 

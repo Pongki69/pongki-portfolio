@@ -38,7 +38,7 @@
     {
       "name": "OmniDeck",
       "title": "OmniDeck",
-      "description": "",
+      "description": "Test",
       "url": "https://github.com/Pongki69/OmniDeck",
       "liveUrl": "",
       "language": "Kotlin",
@@ -60,10 +60,10 @@
       "statusFlowTitle": "Project status",
       "statusSteps": [],
       "noteEnabled": false,
-      "noteTitle": "",
+      "noteTitle": "Highlight",
       "note": "",
       "galleryEnabled": false,
-      "galleryTitle": "",
+      "galleryTitle": "Explore project",
       "gallery": [],
       "livePreviewEnabled": false
     },

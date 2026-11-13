@@ -6,6 +6,7 @@
       "title": "OmniDrop",
       "description": "OmniDrop is a local file-sharing app for Android and Windows. Pair devices using a verification code, choose a same-Wi-Fi or Wi-Fi Direct connection, and send files with transfer progress and controls. The app also includes chat, clipboard sharing, transfer history, themes, and a built-in file explorer.",
       "url": "https://github.com/Pongki69/OmniDrop",
+      "defaultBranch": "main",
       "liveUrl": "https://github.com/Pongki69/OmniDrop",
       "language": "Dart",
       "languages": [
@@ -15,7 +16,7 @@
       ],
       "stars": 0,
       "status": "github",
-      "icon": "https://raw.githubusercontent.com/Pongki69/OmniDrop/main/assets/brand/omnidrop_logo.png",
+      "icon": "/assets/brand/omnidrop_logo.png",
       "category": "Cross-platform app",
       "meta": [],
       "storyEnabled": false,
@@ -40,6 +41,7 @@
       "title": "OmniDeck",
       "description": "OmniDeck lets you play your PC games on an Android phone while the game runs on Windows. The host captures and streams video and audio to the phone, and the Android app sends your inputs back to the PC. Players can customize the on-screen layout for each game or use a physical gamepad.",
       "url": "https://github.com/Pongki69/OmniDeck",
+      "defaultBranch": "main",
       "liveUrl": "",
       "language": "Kotlin",
       "languages": [
@@ -73,6 +75,7 @@
       "title": "PageAtlas",
       "description": "Capture any website or web app as a visual design review: full-page and mobile scroll screenshots, linked-page exploration, a page structure map, and offline HTML or PDF export.",
       "url": "https://github.com/Pongki69/PageAtlas",
+      "defaultBranch": "main",
       "liveUrl": "https://page-atlas.vercel.app",
       "language": "TypeScript",
       "languages": [
@@ -105,6 +108,7 @@
       "title": "Aetheria",
       "description": "A spatial 3D workspace for an AI workforce, with customizable agents, imported models, task conversations, and animation tools.",
       "url": "https://github.com/Pongki69/Aetheria",
+      "defaultBranch": "main",
       "liveUrl": "",
       "language": "TypeScript",
       "languages": [
@@ -146,6 +150,7 @@
       "title": "DineFlow",
       "description": "A full-stack restaurant platform connecting reservations, ordering, payments, and delivery in one role-based workspace for customers and restaurant teams.",
       "url": "https://github.com/Pongki69/DineFlow",
+      "defaultBranch": "main",
       "liveUrl": "https://dineflow-wp77.onrender.com/",
       "language": "JavaScript",
       "languages": [
@@ -190,6 +195,7 @@
       "title": "Catalyst Hub",
       "description": "A MERN client-service platform that guides work from a client request through agent proposals, selection, and delivery tracking.",
       "url": "https://github.com/Pongki69/CatalystHub",
+      "defaultBranch": "main",
       "liveUrl": "https://catalyst-hub-beryl.vercel.app/",
       "language": "TypeScript",
       "languages": [
@@ -290,6 +296,7 @@
       "title": "YouTube Thumbnail Enhancer",
       "description": "Tampermonkey script that forces max resolution thumbnails and avatars on YouTube",
       "url": "https://github.com/Pongki69/youtube-thumbnail-enhancer",
+      "defaultBranch": "main",
       "liveUrl": "",
       "language": "JavaScript",
       "languages": [
@@ -322,6 +329,7 @@
       "title": "Event Horizon",
       "description": "An all-in-one web app designed to track events and banners across popular gacha games, including Genshin Impact, Honkai: Star Rail, Zenless Zone Zero, and Wuthering Waves. Stay updated, plan your pulls, and never miss limited-time content.",
       "url": "https://github.com/Pongki69/Event-Horizon",
+      "defaultBranch": "main",
       "liveUrl": "https://event-horizon-gray.vercel.app/",
       "language": "HTML",
       "languages": [

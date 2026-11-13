@@ -33,6 +33,7 @@
     .message[data-kind="success"] { color:var(--green); }
     .repo-list { display:grid; gap:12px; }
     .repo-card { display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,.48fr); gap:24px; padding:20px; background:linear-gradient(110deg,#202020,#1a1a1a); border:1px solid var(--line); border-radius:13px; }
+    .repo-card.project-edit-card { grid-template-columns:minmax(0,1fr); gap:8px; }
     .repo-card:hover { border-color:#62504c; }
     .repo-title-row { display:flex; align-items:center; flex-wrap:wrap; gap:10px; }
     .repo-title { color:var(--ink); font-size:17px; font-weight:700; text-decoration:none; letter-spacing:-.025em; }
@@ -46,12 +47,35 @@
     .repo-controls select,.repo-controls input { width:100%; min-height:39px; padding:9px 10px; color:var(--ink); background:#141414; border:1px solid var(--line); border-radius:8px; outline:none; font-size:12px; }
     .live-url-field[hidden] { display:none; }
     .empty { padding:28px; color:var(--muted); text-align:center; background:#ffffff06; border:1px dashed var(--line); border-radius:12px; }
+    .editor-layout { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px; }
+    .editor-panel { display:grid; align-content:start; gap:12px; padding:14px; background:#151515; border:1px solid #303030; border-radius:10px; }
+    .edit-field { display:grid; gap:6px; min-width:0; }
+    .edit-field input,.edit-field textarea,.repo-card select { width:100%; min-height:39px; padding:9px 10px; color:var(--ink); background:#111; border:1px solid var(--line); border-radius:7px; outline:none; font:12px Arial,sans-serif; }
+    .edit-field textarea { min-height:68px; resize:vertical; line-height:1.5; }
+    .edit-field input:focus,.edit-field textarea:focus,.repo-card select:focus { border-color:var(--accent); }
+    .icon-row { display:grid; grid-template-columns:1fr auto; align-items:end; gap:9px; }
+    .upload-field { display:grid; gap:6px; padding:10px; border:1px dashed #555; border-radius:7px; color:#ddd; font-size:11px; cursor:pointer; }
+    .upload-field input { width:190px; max-width:48vw; color:var(--muted); font-size:10px; }
+    .section-toggles { display:flex; flex-wrap:wrap; gap:8px; padding:10px; background:#ffffff08; border:1px solid var(--line); border-radius:8px; }
+    .section-check { display:flex; align-items:center; gap:6px; padding:6px 8px; background:#222; border:1px solid #3b3b3b; border-radius:6px; color:#ddd; font-size:11px; cursor:pointer; }
+    .section-check input { accent-color:var(--accent); }
+    .conditional-section { display:grid; gap:10px; padding:11px; border:1px solid #343434; border-radius:8px; }
+    .conditional-section[hidden] { display:none; }
+    .edit-block { display:grid; gap:10px; }
+    .language-picker { display:grid; gap:8px; }
+    .selected-languages,.language-options { display:flex; flex-wrap:wrap; gap:6px; }
+    .selected-language,.language-option { display:inline-flex; align-items:center; gap:6px; padding:6px 8px; color:#ddd; background:#252525; border:1px solid #414141; border-radius:6px; font-size:11px; cursor:pointer; }
+    .selected-language { border-color:#70423d; color:#ffd0ca; }
+    .language-option:disabled { opacity:.38; cursor:default; }
+    .language-option i,.selected-language i { font-size:14px; }
+    .editor-links { margin-top:12px; color:#8d8884; font:10px var(--mono); overflow-wrap:anywhere; }
     .bottom { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:26px; padding-top:18px; border-top:1px solid var(--line); }
     .bottom p { max-width:650px; margin:0; color:#85817d; font-size:11px; line-height:1.6; }
     @media (max-width:680px) {
       .shell { width:min(100% - 24px, 560px); padding-top:17px; }
       .hero { grid-template-columns:1fr; padding-top:39px; }
       .repo-card { grid-template-columns:1fr; gap:17px; padding:16px; }
+      .editor-layout { grid-template-columns:1fr; }
       .bottom { align-items:flex-start; flex-direction:column; }
     }
   </style>
@@ -60,7 +84,7 @@
   <main class="shell">
     <div class="topline"><a class="brand" href="https://github.com/Pongki69/pongki-portfolio" target="_blank" rel="noopener noreferrer">PONGKI / PORTFOLIO</a><span class="local-badge">LOCAL MANAGER</span></div>
     <header class="hero">
-      <div><p class="eyebrow">Private project controls</p><h1>Manage your projects.</h1><p class="intro">Choose where each public repository appears on your portfolio. Save and push publishes the changes to GitHub. Your public portfolio stays open to visitors and has no login or write access.</p></div>
+      <div><p class="eyebrow">Private project controls</p><h1>Manage your projects.</h1><p class="intro">Edit every project using the same fields: title, description, icon, category, links, searchable languages, project details, and optional workflow, status, notes, screenshots, or live preview. Check only the sections you want displayed. Save and push publishes your changes to GitHub.</p></div>
     </header>
     <div class="toolbar">
       <div class="toolbar-left"><input id="search" type="search" placeholder="Find a repository…" aria-label="Filter repositories"><button id="refresh" class="button" type="button">Refresh from GitHub</button></div>
@@ -70,199 +94,6 @@
     <section id="repo-list" class="repo-list" aria-label="Public repositories"></section>
     <footer class="bottom"><p>This manager runs only on this computer and uses your existing Git setup to publish the project list. Private repositories and forks are not included.</p><button id="stop" class="button danger" type="button">Close manager</button></footer>
   </main>
-  <script>
-    const list = document.getElementById('repo-list');
-    const message = document.getElementById('message');
-    const publishButton = document.getElementById('publish');
-    const languageIcons = {
-      'C': 'c-plain', 'C#': 'csharp-plain', 'C++': 'cplusplus-plain', CSS: 'css3-plain', Go: 'go-plain', HTML: 'html5-plain',
-      Java: 'java-plain', JavaScript: 'javascript-plain', Kotlin: 'kotlin-plain', PHP: 'php-plain', Python: 'python-plain',
-      Ruby: 'ruby-plain', Rust: 'rust-original', Shell: 'bash-plain', Swift: 'swift-plain', TypeScript: 'typescript-plain'
-    };
-    let repositories = [];
-    let savedProjects = new Map();
-    let loading = false;
-
-    function showMessage(text, kind = '') {
-      message.textContent = text;
-      message.dataset.kind = kind;
-    }
-
-    function currentFormSettings() {
-      return new Map([...list.querySelectorAll('.repo-card')].map((card) => [card.dataset.repo.toLowerCase(), {
-        status: card.querySelector('.repo-status').value,
-        liveUrl: card.querySelector('.live-url').value.trim()
-      }]));
-    }
-
-    function makeLanguage(language) {
-      const line = document.createElement('span');
-      line.className = 'repo-language';
-      const iconName = languageIcons[language] || '';
-      if (iconName) {
-        const icon = document.createElement('i');
-        icon.className = `devicon-${iconName} colored`;
-        icon.setAttribute('aria-hidden', 'true');
-        line.append(icon);
-      }
-      const label = document.createElement('span');
-      label.textContent = language || 'Language not detected';
-      line.append(label);
-      return line;
-    }
-
-    function renderRepositories(overrides = new Map()) {
-      list.replaceChildren();
-      if (!repositories.length) {
-        const empty = document.createElement('div');
-        empty.className = 'empty';
-        empty.textContent = 'No public repositories were found.';
-        list.append(empty);
-        return;
-      }
-
-      repositories.forEach((repo) => {
-        const key = repo.name.toLowerCase();
-        const saved = savedProjects.get(key) || {};
-        const override = overrides.get(key) || {};
-        const card = document.createElement('article');
-        card.className = 'repo-card';
-        card.dataset.repo = repo.name;
-
-        const summary = document.createElement('div');
-        const titleRow = document.createElement('div');
-        titleRow.className = 'repo-title-row';
-        const title = document.createElement('a');
-        title.className = 'repo-title';
-        title.href = repo.html_url;
-        title.target = '_blank';
-        title.rel = 'noopener noreferrer';
-        title.textContent = repo.name;
-        const type = document.createElement('span');
-        type.className = 'repo-kind';
-        type.textContent = repo.archived ? 'Archived' : 'Public repository';
-        titleRow.append(title, type);
-        summary.append(titleRow);
-        const description = document.createElement('p');
-        description.className = 'repo-description';
-        description.textContent = repo.description || 'No GitHub description yet.';
-        summary.append(description, makeLanguage(repo.language));
-
-        const controls = document.createElement('div');
-        controls.className = 'repo-controls';
-        const statusLabel = document.createElement('label');
-        statusLabel.className = 'status-field';
-        const statusCaption = document.createElement('span');
-        statusCaption.className = 'field-label';
-        statusCaption.textContent = 'Show this repository as';
-        const select = document.createElement('select');
-        select.className = 'repo-status';
-        select.setAttribute('aria-label', `Portfolio status for ${repo.name}`);
-        [['github','More GitHub projects'],['in-progress','In progress'],['live','Live'],['hidden','Hidden from portfolio']].forEach(([value, label]) => {
-          const option = document.createElement('option');
-          option.value = value;
-          option.textContent = label;
-          select.append(option);
-        });
-        select.value = override.status || saved.status || 'github';
-        statusLabel.append(statusCaption, select);
-
-        const liveLabel = document.createElement('label');
-        liveLabel.className = 'live-url-field';
-        const liveCaption = document.createElement('span');
-        liveCaption.className = 'field-label';
-        liveCaption.textContent = 'Live project URL (optional)';
-        const liveInput = document.createElement('input');
-        liveInput.className = 'live-url';
-        liveInput.type = 'url';
-        liveInput.placeholder = 'https://your-project.example';
-        liveInput.value = override.liveUrl ?? saved.liveUrl ?? repo.homepage ?? '';
-        liveInput.setAttribute('aria-label', `Live project URL for ${repo.name}`);
-        liveLabel.append(liveCaption, liveInput);
-        liveLabel.hidden = select.value !== 'live';
-        select.addEventListener('change', () => { liveLabel.hidden = select.value !== 'live'; publishButton.disabled = false; });
-        liveInput.addEventListener('input', () => { publishButton.disabled = false; });
-        controls.append(statusLabel, liveLabel);
-        card.append(summary, controls);
-        list.append(card);
-      });
-      applySearch();
-      publishButton.disabled = false;
-    }
-
-    function applySearch() {
-      const query = document.getElementById('search').value.trim().toLowerCase();
-      list.querySelectorAll('.repo-card').forEach((card) => {
-        card.hidden = query && !card.textContent.toLowerCase().includes(query);
-      });
-    }
-
-    async function loadRepositories(refresh = false) {
-      if (loading) return;
-      loading = true;
-      document.getElementById('refresh').disabled = true;
-      const overrides = currentFormSettings();
-      showMessage(refresh ? 'Refreshing your public repositories…' : 'Loading your public repositories…');
-      try {
-        const [repoResponse, projectResponse] = await Promise.all([
-          fetch(`/api/repos${refresh ? '?refresh=1' : ''}`, { cache: 'no-store' }),
-          fetch('/api/projects', { cache: 'no-store' })
-        ]);
-        const repoData = await repoResponse.json();
-        const projectData = await projectResponse.json();
-        if (!repoResponse.ok) throw new Error(repoData.error || 'GitHub could not return your repositories.');
-        if (!projectResponse.ok) throw new Error(projectData.error || 'Saved project settings could not be read.');
-        repositories = repoData.repositories || [];
-        savedProjects = new Map((projectData.projects || []).map((project) => [project.name.toLowerCase(), project]));
-        renderRepositories(overrides);
-        showMessage(`${repositories.length} public repositories ready. Choose a status, then save and push your changes.`);
-      } catch (error) {
-        showMessage(`${error.message} Check your internet connection and try Refresh from GitHub.`, 'error');
-      } finally {
-        loading = false;
-        document.getElementById('refresh').disabled = false;
-      }
-    }
-
-    publishButton.addEventListener('click', async () => {
-      publishButton.disabled = true;
-      document.getElementById('refresh').disabled = true;
-      showMessage('Saving project statuses and pushing the update to GitHub…');
-      try {
-        const statuses = [...list.querySelectorAll('.repo-card')].map((card) => ({
-          name: card.dataset.repo,
-          status: card.querySelector('.repo-status').value,
-          liveUrl: card.querySelector('.live-url').value.trim()
-        }));
-        const response = await fetch('/api/publish', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ statuses })
-        });
-        const result = await response.json();
-        if (!response.ok) throw new Error(result.error || 'The update could not be pushed.');
-        const settingsResponse = await fetch('/api/projects', { cache: 'no-store' });
-        const settings = await settingsResponse.json();
-        savedProjects = new Map((settings.projects || []).map((project) => [project.name.toLowerCase(), project]));
-        renderRepositories();
-        showMessage(result.message + (result.details ? ` ${result.details}` : ''), 'success');
-      } catch (error) {
-        showMessage(`${error.message} Your selections are still here; you can retry Save & push.`, 'error');
-      } finally {
-        publishButton.disabled = false;
-        document.getElementById('refresh').disabled = false;
-      }
-    });
-
-    document.getElementById('refresh').addEventListener('click', () => loadRepositories(true));
-    document.getElementById('search').addEventListener('input', applySearch);
-    document.getElementById('stop').addEventListener('click', async () => {
-      showMessage('Closing the local manager…');
-      try { await fetch('/api/shutdown', { method: 'POST' }); } catch {}
-      document.body.innerHTML = '<main class="shell"><p class="eyebrow">Manager closed</p><h1>You can close this tab.</h1><p class="intro">Run start-repo-manager.bat again when you want to update your project statuses.</p></main>';
-    });
-
-    loadRepositories();
-  </script>
+  <script src="manager.js"></script>
 </body>
 </html>

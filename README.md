@@ -8,7 +8,7 @@ Open `index.html` in a browser. The site is built with HTML, CSS, and JavaScript
 
 ## Manage portfolio projects
 
-Run `start-repo-manager.bat` on Windows to open the local project manager. It reads your public, non-fork repositories from GitHub and lets you show each one under **Live**, **In progress**, **More GitHub projects**, or hide it. Choose a live URL when a project has a demo, then select **Save & push** to update `portfolio-projects.json`, commit it, and push it to `main`.
+Run `start-repo-manager.bat` on Windows to open the local project manager. It reads your public, non-fork repositories from GitHub and gives every project the same editor for its title, description, icon, category, links, searchable language badges, project details, overview, workflows, status steps, notes, screenshot gallery, and optional live preview. Toggle optional sections on or off per project. Choose **Save & push** to publish the portfolio data and selected icon images to `main`.
 
 The manager needs Node.js and a Git setup that can push to this repository. It runs on `127.0.0.1` and is excluded from Vercel deployments. Visitors only read the public project list; the portfolio has no login or write endpoint.
 
@@ -16,6 +16,8 @@ The manager needs Node.js and a Git setup that can push to this repository. It r
 
 - `index.html` — portfolio home page
 - `atheria.html` — interactive Atheria prototype
-- `portfolio-projects.json` — public portfolio project list and statuses
+- `portfolio-projects.json` — public portfolio project details, sections, languages, and statuses
+- `portfolio-project-renderer.js` — renders the saved project cards on the portfolio
+- `assets/project-icons/` — uploaded project icon images
 - `repo-manager/` — local project management app
 

@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import { execFile } from 'node:child_process';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
 import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -12,7 +12,9 @@ const owner = 'Pongki69';
 const managerDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectDirectory = path.resolve(managerDirectory, '..');
 const configPath = path.join(projectDirectory, 'portfolio-projects.json');
+const iconDirectory = path.join(projectDirectory, 'assets', 'project-icons');
 const pagePath = path.join(managerDirectory, 'index.html');
+const scriptPath = path.join(managerDirectory, 'manager.js');
 const allowedStatuses = new Set(['github', 'in-progress', 'live', 'hidden']);
 let repoCache = { until: 0, repositories: null };
 let saving = false;
@@ -36,7 +38,7 @@ async function readRequestBody(request) {
   let size = 0;
   for await (const chunk of request) {
     size += chunk.length;
-    if (size > 200_000) throw new Error('The submitted project list is too large.');
+    if (size > 5_000_000) throw new Error('The submitted project list is too large.');
     chunks.push(chunk);
   }
   return JSON.parse(Buffer.concat(chunks).toString('utf8'));
@@ -89,21 +91,45 @@ function projectFile(repositories, requestedStatuses, previousConfig) {
       try { parsed = new URL(liveUrl); } catch { throw new Error(`The live URL for ${name} is not valid.`); }
       if (parsed.protocol !== 'https:') throw new Error(`The live URL for ${name} must start with https://.`);
     }
-    requestedByName.set(name.toLowerCase(), { status: requested.status, liveUrl });
+    const data = requested.data && typeof requested.data === 'object' ? requested.data : {};
+    requestedByName.set(name.toLowerCase(), { status: requested.status, liveUrl, data });
   }
 
   const projects = repositories.map((repo) => {
     const key = repo.name.toLowerCase();
     const previous = previousByName.get(key) || {};
     const requested = requestedByName.get(key);
+    const data = requested?.data || {};
+    const languages = Array.isArray(data.languages) ? [...new Set(data.languages.filter((item) => typeof item === 'string').map((item) => item.trim()).filter(Boolean))].slice(0, 30) : previous.languages || (repo.language ? [repo.language] : []);
     return {
       name: repo.name,
-      description: (repo.description || previous.description || '').slice(0, 500),
+      title: (typeof data.title === 'string' ? data.title : previous.title || repo.name).slice(0, 120),
+      description: (typeof data.description === 'string' ? data.description : repo.description || previous.description || '').slice(0, 1200),
       url: repo.html_url,
       liveUrl: requested?.liveUrl ?? previous.liveUrl ?? repo.homepage ?? '',
       language: repo.language || previous.language || '',
+      languages,
       stars: Number.isInteger(repo.stargazers_count) ? repo.stargazers_count : 0,
-      status: requested?.status || previous.status || 'github'
+      status: requested?.status || previous.status || 'github',
+      icon: typeof data.icon === 'string' ? data.icon.slice(0, 300) : previous.icon || '',
+      category: (typeof data.category === 'string' ? data.category : previous.category || '').slice(0, 120),
+      meta: Array.isArray(data.meta) ? data.meta.filter((row) => row && typeof row.label === 'string' && typeof row.value === 'string').slice(0, 8).map((row) => ({ label: row.label.slice(0, 60), value: row.value.slice(0, 400) })) : previous.meta || [],
+      storyEnabled: data.storyEnabled === undefined ? previous.storyEnabled ?? true : Boolean(data.storyEnabled),
+      storyTitle: (typeof data.storyTitle === 'string' ? data.storyTitle : previous.storyTitle || 'Project overview').slice(0, 100),
+      story: (typeof data.story === 'string' ? data.story : previous.story || '').slice(0, 3000),
+      workflowEnabled: data.workflowEnabled === undefined ? previous.workflowEnabled ?? false : Boolean(data.workflowEnabled),
+      workflowTitle: (typeof data.workflowTitle === 'string' ? data.workflowTitle : previous.workflowTitle || 'Project workflow').slice(0, 100),
+      workflowSteps: Array.isArray(data.workflowSteps) ? data.workflowSteps.filter((step) => typeof step === 'string').map((step) => step.slice(0, 100)).slice(0, 12) : previous.workflowSteps || [],
+      statusFlowEnabled: data.statusFlowEnabled === undefined ? previous.statusFlowEnabled ?? false : Boolean(data.statusFlowEnabled),
+      statusFlowTitle: (typeof data.statusFlowTitle === 'string' ? data.statusFlowTitle : previous.statusFlowTitle || 'Project status').slice(0, 100),
+      statusSteps: Array.isArray(data.statusSteps) ? data.statusSteps.filter((step) => typeof step === 'string').map((step) => step.slice(0, 100)).slice(0, 12) : previous.statusSteps || [],
+      noteEnabled: data.noteEnabled === undefined ? previous.noteEnabled ?? false : Boolean(data.noteEnabled),
+      noteTitle: (typeof data.noteTitle === 'string' ? data.noteTitle : previous.noteTitle || '').slice(0, 100),
+      note: (typeof data.note === 'string' ? data.note : previous.note || '').slice(0, 1000),
+      galleryEnabled: data.galleryEnabled === undefined ? previous.galleryEnabled ?? false : Boolean(data.galleryEnabled),
+      galleryTitle: (typeof data.galleryTitle === 'string' ? data.galleryTitle : previous.galleryTitle || '').slice(0, 120),
+      gallery: Array.isArray(data.gallery) ? data.gallery.filter((item) => item && typeof item.src === 'string').slice(0, 20).map((item) => ({ src: item.src.slice(0, 500), alt: String(item.alt || '').slice(0, 300), caption: String(item.caption || '').slice(0, 120) })) : previous.gallery || [],
+      livePreviewEnabled: data.livePreviewEnabled === undefined ? previous.livePreviewEnabled ?? false : Boolean(data.livePreviewEnabled)
     };
   });
 
@@ -140,9 +166,10 @@ async function publishProjectSettings(request, response) {
 
     if (changed) {
       await writeFile(configPath, nextContent, 'utf8');
-      await git(['add', '--', 'portfolio-projects.json']);
+      const iconFiles = await readdir(iconDirectory).catch(() => []);
+      await git(['add', '--', 'portfolio-projects.json', ...(iconFiles.length ? ['assets/project-icons'] : [])]);
       const { stdout: newlyStagedFiles } = await git(['diff', '--cached', '--name-only']);
-      if (newlyStagedFiles.trim() !== 'portfolio-projects.json') {
+      if (newlyStagedFiles.split(/\r?\n/).filter(Boolean).some((file) => file !== 'portfolio-projects.json' && !file.startsWith('assets/project-icons/'))) {
         throw new Error('The manager found another staged file and stopped before committing.');
       }
       await git(['commit', '-m', 'Update portfolio project statuses']);
@@ -174,6 +201,14 @@ const server = createServer(async (request, response) => {
     return;
   }
 
+  if (request.method === 'GET' && requestUrl.pathname === '/manager.js') {
+    try {
+      response.writeHead(200, { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
+      response.end(await readFile(scriptPath));
+    } catch { sendJson(response, 500, { error: 'The manager controls could not be loaded.' }); }
+    return;
+  }
+
   if (request.method === 'GET' && requestUrl.pathname === '/api/projects') {
     try { sendJson(response, 200, JSON.parse(await readFile(configPath, 'utf8'))); }
     catch { sendJson(response, 500, { error: 'The saved portfolio projects could not be read.' }); }
@@ -192,6 +227,23 @@ const server = createServer(async (request, response) => {
 
   if (request.method === 'POST' && requestUrl.pathname === '/api/publish') {
     await publishProjectSettings(request, response);
+    return;
+  }
+
+  if (request.method === 'POST' && requestUrl.pathname === '/api/icon') {
+    if (!isLocalRequest(request)) return sendJson(response, 403, { error: 'This manager only accepts requests from its local page.' });
+    try {
+      const body = await readRequestBody(request);
+      const name = typeof body.name === 'string' ? body.name : '';
+      if (!/^[a-zA-Z0-9._-]{1,100}$/.test(name) || !['png', 'jpg', 'jpeg', 'webp', 'gif'].includes(body.extension)) throw new Error('Choose a PNG, JPG, WebP, or GIF icon file.');
+      const raw = String(body.data || '').replace(/^data:image\/[a-zA-Z0-9.+-]+;base64,/, '');
+      const buffer = Buffer.from(raw, 'base64');
+      if (!buffer.length || buffer.length > 3_000_000) throw new Error('The icon must be smaller than 3 MB.');
+      await mkdir(iconDirectory, { recursive: true });
+      const filename = `${name.toLowerCase()}.${body.extension === 'jpeg' ? 'jpg' : body.extension}`;
+      await writeFile(path.join(iconDirectory, filename), buffer);
+      sendJson(response, 200, { path: `assets/project-icons/${filename}` });
+    } catch (error) { sendJson(response, 400, { error: error.message || 'The icon could not be saved.' }); }
     return;
   }
 

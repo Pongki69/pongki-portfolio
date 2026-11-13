@@ -8,7 +8,11 @@
       "liveUrl": "",
       "language": "Dart",
       "stars": 0,
-      "status": "github"
+      "status": "github",
+      "title": "OmniDrop",
+      "languages": [
+        "Dart"
+      ]
     },
     {
       "name": "OmniDeck",
@@ -17,7 +21,11 @@
       "liveUrl": "",
       "language": "Kotlin",
       "stars": 0,
-      "status": "github"
+      "status": "github",
+      "title": "OmniDeck",
+      "languages": [
+        "Kotlin"
+      ]
     },
     {
       "name": "PageAtlas",
@@ -26,34 +34,165 @@
       "liveUrl": "https://page-atlas.vercel.app",
       "language": "TypeScript",
       "stars": 0,
-      "status": "github"
+      "status": "github",
+      "title": "PageAtlas",
+      "languages": [
+        "TypeScript"
+      ]
     },
     {
       "name": "Aetheria",
-      "description": "",
+      "description": "A spatial 3D workspace for an AI workforce, with customizable agents, imported models, task conversations, and animation tools.",
       "url": "https://github.com/Pongki69/Aetheria",
       "liveUrl": "",
       "language": "TypeScript",
       "stars": 0,
-      "status": "in-progress"
+      "status": "in-progress",
+      "title": "Aetheria",
+      "category": "3D workspace · AI workforce",
+      "languages": [
+        "TypeScript"
+      ],
+      "meta": [
+        {
+          "value": "Shared spatial 3D environment",
+          "label": "Workspace"
+        },
+        {
+          "value": "Custom agents, model imports, conversations, animation",
+          "label": "Tools"
+        }
+      ],
+      "storyEnabled": true,
+      "storyTitle": "Project overview",
+      "story": "Building a workspace where users can configure AI agents, bring 3D models into the environment, and follow task conversations alongside animation tools."
     },
     {
       "name": "DineFlow",
-      "description": "",
+      "description": "A full-stack restaurant platform connecting reservations, ordering, payments, and delivery in one role-based workspace for customers and restaurant teams.",
       "url": "https://github.com/Pongki69/DineFlow",
       "liveUrl": "https://dineflow-wp77.onrender.com/",
       "language": "JavaScript",
       "stars": 0,
-      "status": "in-progress"
+      "status": "in-progress",
+      "title": "DineFlow",
+      "category": "Restaurant management · Reservations",
+      "languages": [
+        "JavaScript",
+        "PHP",
+        "HTML",
+        "CSS"
+      ],
+      "meta": [
+        {
+          "value": "Design restaurant floor plans in 2D and preview them in 3D",
+          "label": "Standout feature"
+        },
+        {
+          "value": "React 19 · Laravel 13 · PostgreSQL 17 · Three.js",
+          "label": "Stack"
+        }
+      ],
+      "storyEnabled": true,
+      "storyTitle": "What it offers",
+      "story": "Staff can arrange and publish restaurant layouts. Customers explore the floor in first person, walk to an available table, and press E to open its booking dialog. Role-based tools support reservations, menu and order management, kitchen service, payments, and delivery."
     },
     {
       "name": "CatalystHub",
-      "description": "",
+      "description": "A MERN client-service platform that guides work from a client request through agent proposals, selection, and delivery tracking.",
       "url": "https://github.com/Pongki69/CatalystHub",
       "liveUrl": "https://catalyst-hub-beryl.vercel.app/",
       "language": "TypeScript",
       "stars": 0,
-      "status": "live"
+      "status": "live",
+      "title": "Catalyst Hub",
+      "category": "Web development",
+      "languages": [
+        "TypeScript",
+        "CSS",
+        "HTML",
+        "JavaScript"
+      ],
+      "meta": [
+        {
+          "value": "MongoDB · Express.js · React · Node.js",
+          "label": "Stack"
+        },
+        {
+          "value": "Submit, compare proposals, select, track",
+          "label": "Client flow"
+        }
+      ],
+      "workflowEnabled": true,
+      "workflowTitle": "Client workflow",
+      "workflowSteps": [
+        "Submit request",
+        "Review proposals",
+        "Choose agent",
+        "Track progress"
+      ],
+      "statusFlowEnabled": true,
+      "statusFlowTitle": "Request status",
+      "statusSteps": [
+        "Submitted",
+        "In progress",
+        "Client review",
+        "Resolved"
+      ],
+      "noteEnabled": true,
+      "noteTitle": "Agent workspace",
+      "note": "Agents review and respond to briefs, track team requests, coordinate progress, and message clients.",
+      "galleryEnabled": true,
+      "galleryTitle": "Explore the Catalyst Hub workflow",
+      "gallery": [
+        {
+          "src": "assets/catalyst-request-progress.png",
+          "alt": "Client request detail with status timeline, agent responses, and conversation",
+          "caption": "Request progress"
+        },
+        {
+          "src": "assets/catalyst-client-calendar.png",
+          "alt": "Client calendar showing scheduled requests and due dates",
+          "caption": "Client calendar"
+        },
+        {
+          "src": "assets/catalyst-private-messages.png",
+          "alt": "Private client and agent message conversation",
+          "caption": "Private messages"
+        },
+        {
+          "src": "assets/catalyst-client-activity.png",
+          "alt": "Client activity timeline with request events and filters",
+          "caption": "Activity history"
+        },
+        {
+          "src": "assets/catalyst-agent-overview.png",
+          "alt": "Agent workspace overview showing workload and recent requests",
+          "caption": "Agent overview"
+        },
+        {
+          "src": "assets/catalyst-agent-board.png",
+          "alt": "Agent request board with status, priority, and team filters",
+          "caption": "Team request board"
+        },
+        {
+          "src": "assets/catalyst-agent-response.png",
+          "alt": "Agent response form",
+          "caption": "Agent proposal response"
+        },
+        {
+          "src": "assets/catalyst-team-progress.png",
+          "alt": "Agent request progress timeline",
+          "caption": "Team coordination"
+        },
+        {
+          "src": "assets/catalyst-agent-calendar.png",
+          "alt": "Agent work calendar with active requests and deadlines",
+          "caption": "Agent work calendar"
+        }
+      ],
+      "livePreviewEnabled": true,
+      "storyEnabled": false
     },
     {
       "name": "youtube-thumbnail-enhancer",
@@ -62,16 +201,62 @@
       "liveUrl": "",
       "language": "JavaScript",
       "stars": 0,
-      "status": "github"
+      "status": "github",
+      "title": "YouTube Thumbnail Enhancer",
+      "languages": [
+        "JavaScript"
+      ]
     },
     {
       "name": "Event-Horizon",
-      "description": "An all-in-one web app designed to track events and banners across popular gacha games, including Genshin Impact, Honkai: Star Rail, Zenless Zone Zero, and Wuthering Waves. Stay updated, plan your pulls, and never miss limited-time content.",
+      "description": "A multi-game tracker for gacha events, character banners, and endgame rotations. Browse a live calendar or table, check countdowns, and keep up with daily data refreshes.",
       "url": "https://github.com/Pongki69/Event-Horizon",
       "liveUrl": "https://event-horizon-gray.vercel.app/",
       "language": "HTML",
       "stars": 0,
-      "status": "in-progress"
+      "status": "in-progress",
+      "title": "Event Horizon",
+      "category": "Web automation",
+      "languages": [
+        "HTML",
+        "JavaScript",
+        "CSS",
+        "TypeScript",
+        "Batchfile"
+      ],
+      "meta": [
+        {
+          "value": "Genshin Impact, Honkai: Star Rail, Zenless Zone Zero, and Wuthering Waves",
+          "label": "Coverage"
+        },
+        {
+          "value": "Puppeteer + scheduled GitHub Actions",
+          "label": "Automation"
+        }
+      ],
+      "storyEnabled": true,
+      "storyTitle": "What it offers",
+      "story": "Filter the calendar by game, hide ended or permanent events, and follow banner and endgame timers in a responsive view.",
+      "galleryEnabled": true,
+      "galleryTitle": "Explore Event Horizon",
+      "gallery": [
+        {
+          "src": "assets/event-horizon-landing.png",
+          "alt": "Event Horizon landing page introducing its gaming event tracker",
+          "caption": "Landing page"
+        },
+        {
+          "src": "assets/event-horizon-features.png",
+          "alt": "Event tracker features",
+          "caption": "Feature overview"
+        },
+        {
+          "src": "assets/event-horizon-calendar.png",
+          "alt": "Live event calendar with game filters and banner countdowns",
+          "caption": "Live event calendar"
+        }
+      ],
+      "livePreviewEnabled": true
     }
   ]
 }

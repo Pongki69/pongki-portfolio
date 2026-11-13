@@ -185,6 +185,7 @@ h1 { max-width: 740px; margin: 20px 0 22px; font: 700 clamp(52px, 7vw, 84px)/1.0
 .project-meta b { color: var(--ink); font-weight: 600; }
 .github-projects-status { margin: -7px 0 18px; color: var(--muted); font-size: 12px; line-height: 1.6; }
 .github-repo-card { min-height: 230px; }
+.project-portfolio-wide { grid-column: 1 / -1; min-height: 0; padding: 30px; }
 .github-repo-card h3 a { color: var(--ink); text-decoration: none; }
 .github-repo-card h3 a:hover { color: var(--green); }
 .github-repo-card .project-foot { margin-top: 22px; }
@@ -505,6 +506,7 @@ body { background: radial-gradient(ellipse at 88% 4%, #e9e4d5 0, transparent 32%
 }
 .project:hover .project-icon { transform: rotate(2deg) scale(1.05); }
 .project-icon svg { width: 29px; height: 29px; }
+.project-icon img { width: 100%; height: 100%; object-fit: cover; }
 .project-icon.violet { color: #181919; background: #e5f64d; }
 .project-icon.orange { color: #fff8eb; background: #e34c42; filter: drop-shadow(4px 4px 0 #e5f64d); }
 .project-icon:not(.violet):not(.orange) { color: #132126; background: #62d8dc; filter: drop-shadow(4px 4px 0 #e34c42); }

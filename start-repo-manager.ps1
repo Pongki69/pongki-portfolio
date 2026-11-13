@@ -1,11 +1,50 @@
+param([ValidateSet('start', 'stop')][string]$Mode = 'start')
+
 $ErrorActionPreference = 'Stop'
 $managerUrl = 'http://127.0.0.1:4179/'
 $serverPath = Join-Path $PSScriptRoot 'repo-manager\server.mjs'
 $workerPath = Join-Path $PSScriptRoot 'repo-manager\git-worker.ps1'
 
+function Get-LocalListenerProcessId([int]$Port) {
+    $pattern = "^\s*TCP\s+127\.0\.0\.1:$Port\s+0\.0\.0\.0:0\s+LISTENING\s+(\d+)\s*$"
+    $entry = netstat -ano -p tcp | Select-String -Pattern $pattern | Select-Object -First 1
+    if ($entry) { return [int]$entry.Matches[0].Groups[1].Value }
+    return $null
+}
+
+function Stop-PortfolioService([int]$Port, [string]$ExpectedBackend) {
+    $processId = Get-LocalListenerProcessId $Port
+    if (-not $processId) { return $false }
+    try {
+        $version = Invoke-RestMethod -Uri "http://127.0.0.1:$Port/api/version" -TimeoutSec 2
+        if ($version.backend -ne $ExpectedBackend) { return $false }
+        Invoke-RestMethod -Uri "http://127.0.0.1:$Port/api/shutdown" -Method Post -Headers @{ Origin = 'http://127.0.0.1:4179' } -TimeoutSec 2 | Out-Null
+    } catch { return $false }
+
+    for ($attempt = 0; $attempt -lt 20; $attempt += 1) {
+        Start-Sleep -Milliseconds 150
+        if (-not (Get-LocalListenerProcessId $Port)) { return $true }
+    }
+
+    Stop-Process -Id $processId -Force -ErrorAction SilentlyContinue
+    Start-Sleep -Milliseconds 250
+    return (-not (Get-LocalListenerProcessId $Port))
+}
+
 try {
     $nodePath = (Get-Command node.exe -ErrorAction Stop).Source
     $powershellPath = (Get-Command powershell.exe -ErrorAction Stop).Source
+
+    if ($Mode -eq 'stop') {
+        $managerStopped = Stop-PortfolioService 4179 'node-git-worker-retry'
+        $workerStopped = Stop-PortfolioService 4181 'powershell-native-manager-retry3'
+        if ($managerStopped -or $workerStopped) {
+            Write-Host 'The portfolio project manager service has stopped.' -ForegroundColor Green
+        } else {
+            Write-Host 'The portfolio project manager service was not running.' -ForegroundColor Yellow
+        }
+        exit 0
+    }
 
     $workerListener = Get-NetTCPConnection -LocalPort 4181 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
     if ($workerListener) {

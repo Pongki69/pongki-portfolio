@@ -156,13 +156,6 @@ async function publishProjectSettings(request, response) {
     const { stdout: stagedFiles } = await git(['diff', '--cached', '--name-only']);
     if (stagedFiles.trim()) throw new Error('There are already staged changes in this checkout. Commit or unstage them before publishing project settings.');
 
-    await git(['fetch', 'origin', 'main']);
-    const { stdout: remoteAhead } = await git(['rev-list', '--count', 'HEAD..origin/main']);
-    const { stdout: localAhead } = await git(['rev-list', '--count', 'origin/main..HEAD']);
-    if (remoteAhead.trim() !== '0' || localAhead.trim() !== '0') {
-      throw new Error('This checkout and GitHub are out of sync. Pull the latest main branch and reopen the manager.');
-    }
-
     const repositories = await getPublicRepositories(true);
     const settings = projectFile(repositories, body.statuses, JSON.parse(await readFile(configPath, 'utf8')));
     const nextContent = `${JSON.stringify(settings, null, 2)}\n`;

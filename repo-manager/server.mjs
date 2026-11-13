@@ -1,5 +1,5 @@
 import { createServer } from 'node:http';
-import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -41,11 +41,11 @@ async function readRequestBody(request) {
   return JSON.parse(Buffer.concat(chunks).toString('utf8'));
 }
 
-async function git(args) {
+async function git(operation) {
   const response = await fetch('http://127.0.0.1:4181/api/git', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Origin: `http://${host}:${port}` },
-    body: JSON.stringify({ args }),
+    body: JSON.stringify({ operation }),
     signal: AbortSignal.timeout(120_000)
   });
   const result = await response.json();
@@ -141,6 +141,16 @@ function projectFile(repositories, requestedStatuses, previousConfig) {
   return { owner, projects };
 }
 
+function publishErrorMessage(error) {
+  const message = error?.message || '';
+  if (/index\.lock.*(?:File exists|already exists)/i.test(message)) return 'Git is already using this repository. Wait for the current Git operation to finish, then retry.';
+  if (/non-fast-forward|rejected.*(?:fetch first|behind)|not possible to fast-forward/i.test(message)) return 'GitHub has newer portfolio changes. Pull the latest main branch, restart the manager, and retry.';
+  if (/Failed to connect|Could not resolve host|proxy/i.test(message)) return 'The manager could not reach GitHub. Check your internet connection and retry; your edits are still saved locally.';
+  if (/index\.lock.*(?:Permission denied|Access is denied)|unable to create .*index/i.test(message)) return 'Windows blocked Git from updating this checkout. Close other Git apps and reopen the manager from the portfolio folder.';
+  if (/Git request is not allowed|unknown Git operation/i.test(message)) return 'The local Git helper needs restarting. Choose Stop the service, then Run the service from the launcher.';
+  return message || 'The project settings could not be published.';
+}
+
 async function publishProjectSettings(request, response) {
   if (!isLocalRequest(request)) return sendJson(response, 403, { error: 'This manager only accepts requests from its local page.' });
   if (saving) return sendJson(response, 409, { error: 'A save is already running. Wait for it to finish.' });
@@ -150,10 +160,10 @@ async function publishProjectSettings(request, response) {
     const body = await readRequestBody(request);
     if (!Array.isArray(body.statuses)) throw new Error('The submitted project settings are missing.');
 
-    const { stdout: branch } = await git(['branch', '--show-current']);
+    const { stdout: branch } = await git('branch');
     if (branch.trim() !== 'main') throw new Error('Switch the portfolio checkout to the main branch, then reopen this manager.');
 
-    const { stdout: stagedFiles } = await git(['diff', '--cached', '--name-only']);
+    const { stdout: stagedFiles } = await git('stagedFiles');
     const stagedList = stagedFiles.split(/\r?\n/).filter(Boolean);
     const projectFileOnly = (file) => file === 'portfolio-projects.json' || file.startsWith('assets/project-icons/');
     if (stagedList.some((file) => !projectFileOnly(file))) {
@@ -165,28 +175,27 @@ async function publishProjectSettings(request, response) {
     const nextContent = `${JSON.stringify(settings, null, 2)}\n`;
     const previousContent = await readFile(configPath, 'utf8').catch(() => '');
     const changed = previousContent !== nextContent;
-    const { stdout: configChanges } = await git(['diff', '--name-only', '--', 'portfolio-projects.json']);
+    const { stdout: configChanges } = await git('unstagedProjectFiles');
     const hasPendingConfig = configChanges.split(/\r?\n/).includes('portfolio-projects.json');
     const hasPendingProjectChanges = stagedList.length > 0 || hasPendingConfig;
 
     if (changed || hasPendingProjectChanges) {
       await writeFile(configPath, nextContent, 'utf8');
-      const iconFiles = await readdir(iconDirectory).catch(() => []);
-      await git(['add', '--', 'portfolio-projects.json', ...(iconFiles.length ? ['assets/project-icons'] : [])]);
-      const { stdout: newlyStagedFiles } = await git(['diff', '--cached', '--name-only']);
+      await git('stageProjectFiles');
+      const { stdout: newlyStagedFiles } = await git('stagedFiles');
       if (newlyStagedFiles.split(/\r?\n/).filter(Boolean).some((file) => file !== 'portfolio-projects.json' && !file.startsWith('assets/project-icons/'))) {
         throw new Error('The manager found another staged file and stopped before committing.');
       }
-      await git(['commit', '-m', 'Update portfolio project details']);
+      if (newlyStagedFiles.trim()) await git('commitProjectFiles');
     }
 
-    const { stdout: pushOutput } = await git(['push', 'origin', 'main']);
+    const { stdout: pushOutput } = await git('pushMain');
     sendJson(response, 200, {
-      message: changed ? 'Project details saved and pushed to GitHub.' : 'No project changes were needed. GitHub is up to date.',
+      message: changed || hasPendingProjectChanges ? 'Project details saved and pushed to GitHub.' : 'No project changes were needed. GitHub is up to date.',
       details: pushOutput.trim()
     });
   } catch (error) {
-    sendJson(response, 400, { error: error.message || 'The project settings could not be published.' });
+    sendJson(response, 400, { error: publishErrorMessage(error) });
   } finally {
     saving = false;
   }
@@ -215,7 +224,7 @@ const server = createServer(async (request, response) => {
   }
 
   if (request.method === 'GET' && requestUrl.pathname === '/api/version') {
-    sendJson(response, 200, { backend: 'node-git-worker-retry' });
+    sendJson(response, 200, { backend: 'node-project-publisher-v2' });
     return;
   }
 

@@ -36,8 +36,8 @@ try {
     $powershellPath = (Get-Command powershell.exe -ErrorAction Stop).Source
 
     if ($Mode -eq 'stop') {
-        $managerStopped = Stop-PortfolioService 4179 'node-git-worker-retry'
-        $workerStopped = Stop-PortfolioService 4181 'powershell-native-manager-retry4'
+        $managerStopped = Stop-PortfolioService 4179 'node-project-publisher-v2'
+        $workerStopped = Stop-PortfolioService 4181 'powershell-project-publisher-v2'
         if ($managerStopped -or $workerStopped) {
             Write-Host 'The portfolio project manager service has stopped.' -ForegroundColor Green
         } else {
@@ -46,58 +46,58 @@ try {
         exit 0
     }
 
-    $workerListener = Get-NetTCPConnection -LocalPort 4181 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
-    if ($workerListener) {
+    $workerProcessId = Get-LocalListenerProcessId 4181
+    if ($workerProcessId) {
         try {
             $workerVersion = Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/version' -TimeoutSec 1
-            if ($workerVersion.backend -ne 'powershell-native-manager-retry4') {
+            if ($workerVersion.backend -ne 'powershell-project-publisher-v2') {
                 Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/shutdown' -Method Post -Headers @{ Origin = 'http://127.0.0.1:4179' } -TimeoutSec 2 | Out-Null
                 for ($attempt = 0; $attempt -lt 20; $attempt += 1) {
                     Start-Sleep -Milliseconds 150
-                    $workerListener = Get-NetTCPConnection -LocalPort 4181 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
-                    if (-not $workerListener) { break }
+                    $workerProcessId = Get-LocalListenerProcessId 4181
+                    if (-not $workerProcessId) { break }
                 }
-                if ($workerListener) {
-                    Stop-Process -Id $workerListener.OwningProcess -Force -ErrorAction SilentlyContinue
+                if ($workerProcessId) {
+                    Stop-Process -Id $workerProcessId -Force -ErrorAction SilentlyContinue
                     Start-Sleep -Milliseconds 250
-                    $workerListener = Get-NetTCPConnection -LocalPort 4181 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
-                    if ($workerListener) { throw 'The old local Git helper did not stop. Close it, then run this launcher again.' }
+                    $workerProcessId = Get-LocalListenerProcessId 4181
+                    if ($workerProcessId) { throw 'The old local Git helper did not stop. Close it, then run this launcher again.' }
                 }
             }
         } catch { throw 'Port 4181 is in use by another app. Close it, then run this launcher again.' }
     }
-    if (-not $workerListener) {
+    if (-not $workerProcessId) {
         Start-Process -FilePath $powershellPath -ArgumentList @('-NoLogo', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$workerPath`"") -WorkingDirectory $PSScriptRoot -WindowStyle Hidden
     }
     $workerReady = $false
     for ($attempt = 0; $attempt -lt 20; $attempt += 1) {
-        try { $worker = Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/version' -TimeoutSec 1; if ($worker.backend -eq 'powershell-native-manager-retry4') { $workerReady = $true; break } } catch { Start-Sleep -Milliseconds 250 }
+        try { $worker = Invoke-RestMethod -Uri 'http://127.0.0.1:4181/api/version' -TimeoutSec 1; if ($worker.backend -eq 'powershell-project-publisher-v2') { $workerReady = $true; break } } catch { Start-Sleep -Milliseconds 250 }
     }
     if (-not $workerReady) { throw 'The local Git helper did not start on port 4181.' }
 
-    $existingListener = Get-NetTCPConnection -LocalPort 4179 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
+    $managerProcessId = Get-LocalListenerProcessId 4179
 
-    if ($existingListener) {
+    if ($managerProcessId) {
         try {
             $version = Invoke-RestMethod -Uri 'http://127.0.0.1:4179/api/version' -TimeoutSec 1
-            if ($version.backend -ne 'node-git-worker-retry') {
+            if ($version.backend -ne 'node-project-publisher-v2') {
                 Invoke-RestMethod -Uri 'http://127.0.0.1:4179/api/shutdown' -Method Post -Headers @{ Origin = 'http://127.0.0.1:4179' } -TimeoutSec 2 | Out-Null
                 for ($attempt = 0; $attempt -lt 20; $attempt += 1) {
                     Start-Sleep -Milliseconds 150
-                    $existingListener = Get-NetTCPConnection -LocalPort 4179 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
-                    if (-not $existingListener) { break }
+                    $managerProcessId = Get-LocalListenerProcessId 4179
+                    if (-not $managerProcessId) { break }
                 }
-                if ($existingListener) {
-                    Stop-Process -Id $existingListener.OwningProcess -Force -ErrorAction SilentlyContinue
+                if ($managerProcessId) {
+                    Stop-Process -Id $managerProcessId -Force -ErrorAction SilentlyContinue
                     Start-Sleep -Milliseconds 250
-                    $existingListener = Get-NetTCPConnection -LocalPort 4179 -State Listen -ErrorAction SilentlyContinue | Select-Object -First 1
-                    if ($existingListener) { throw 'The old project manager did not stop. Close it, then run this launcher again.' }
+                    $managerProcessId = Get-LocalListenerProcessId 4179
+                    if ($managerProcessId) { throw 'The old project manager did not stop. Close it, then run this launcher again.' }
                 }
             }
         } catch { throw 'Port 4179 is in use by another app. Close it, then run this launcher again.' }
     }
 
-    if (-not $existingListener) {
+    if (-not $managerProcessId) {
         Start-Process -FilePath $nodePath -ArgumentList @("`"$serverPath`"") -WorkingDirectory $PSScriptRoot -WindowStyle Hidden
     }
 

@@ -1,11 +1,8 @@
 import { createServer } from 'node:http';
-import { execFile } from 'node:child_process';
 import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
-import { promisify } from 'node:util';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
-const execFileAsync = promisify(execFile);
 const host = '127.0.0.1';
 const port = 4179;
 const owner = 'Pongki69';
@@ -45,7 +42,15 @@ async function readRequestBody(request) {
 }
 
 async function git(args) {
-  return execFileAsync('git', args, { cwd: projectDirectory, windowsHide: true, maxBuffer: 1_000_000 });
+  const response = await fetch('http://127.0.0.1:4181/api/git', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Origin: `http://${host}:${port}` },
+    body: JSON.stringify({ args }),
+    signal: AbortSignal.timeout(120_000)
+  });
+  const result = await response.json();
+  if (!response.ok) throw new Error(result.error || 'Git could not complete the repository update.');
+  return { stdout: result.stdout || '' };
 }
 
 async function getPublicRepositories(forceRefresh = false) {
@@ -172,12 +177,12 @@ async function publishProjectSettings(request, response) {
       if (newlyStagedFiles.split(/\r?\n/).filter(Boolean).some((file) => file !== 'portfolio-projects.json' && !file.startsWith('assets/project-icons/'))) {
         throw new Error('The manager found another staged file and stopped before committing.');
       }
-      await git(['commit', '-m', 'Update portfolio project statuses']);
+      await git(['commit', '-m', 'Update portfolio project details']);
     }
 
     const { stdout: pushOutput } = await git(['push', 'origin', 'main']);
     sendJson(response, 200, {
-      message: changed ? 'Project statuses saved and pushed to GitHub.' : 'No status changes were needed. GitHub is up to date.',
+      message: changed ? 'Project details saved and pushed to GitHub.' : 'No project changes were needed. GitHub is up to date.',
       details: pushOutput.trim()
     });
   } catch (error) {
@@ -206,6 +211,27 @@ const server = createServer(async (request, response) => {
       response.writeHead(200, { 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
       response.end(await readFile(scriptPath));
     } catch { sendJson(response, 500, { error: 'The manager controls could not be loaded.' }); }
+    return;
+  }
+
+  if (request.method === 'GET' && requestUrl.pathname === '/api/version') {
+    sendJson(response, 200, { backend: 'node-git-worker' });
+    return;
+  }
+
+  if (request.method === 'GET' && requestUrl.pathname.startsWith('/preview-assets/')) {
+    try {
+      const relative = decodeURIComponent(requestUrl.pathname.slice('/preview-assets/'.length));
+      const assetRoot = path.resolve(projectDirectory, 'assets');
+      const assetPath = path.resolve(assetRoot, relative);
+      if (!assetPath.startsWith(`${assetRoot}${path.sep}`)) throw new Error('Invalid image path.');
+      const extension = path.extname(assetPath).toLowerCase();
+      const types = { '.png':'image/png', '.jpg':'image/jpeg', '.jpeg':'image/jpeg', '.webp':'image/webp', '.gif':'image/gif' };
+      if (!types[extension]) throw new Error('Unsupported project image.');
+      const bytes = await readFile(assetPath);
+      response.writeHead(200, { 'Content-Type': types[extension], 'Cache-Control':'no-store', 'X-Content-Type-Options':'nosniff' });
+      response.end(bytes);
+    } catch { sendJson(response, 404, { error:'Project image not found.' }); }
     return;
   }
 

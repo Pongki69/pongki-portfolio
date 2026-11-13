@@ -33,7 +33,7 @@
     .message[data-kind="success"] { color:var(--green); }
     .repo-list { display:grid; gap:12px; }
     .repo-card { display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,.48fr); gap:24px; padding:20px; background:linear-gradient(110deg,#202020,#1a1a1a); border:1px solid var(--line); border-radius:13px; }
-    .repo-card.project-edit-card { grid-template-columns:minmax(0,1fr); gap:8px; }
+    .repo-card.project-edit-card { grid-template-columns:minmax(0,1fr); gap:8px; max-height:82vh; overflow:auto; overscroll-behavior:contain; }
     .repo-card:hover { border-color:#62504c; }
     .repo-title-row { display:flex; align-items:center; flex-wrap:wrap; gap:10px; }
     .repo-title { color:var(--ink); font-size:17px; font-weight:700; text-decoration:none; letter-spacing:-.025em; }
@@ -51,7 +51,7 @@
     .editor-panel { display:grid; align-content:start; gap:12px; padding:14px; background:#151515; border:1px solid #303030; border-radius:10px; }
     .edit-field { display:grid; gap:6px; min-width:0; }
     .edit-field input,.edit-field textarea,.repo-card select { width:100%; min-height:39px; padding:9px 10px; color:var(--ink); background:#111; border:1px solid var(--line); border-radius:7px; outline:none; font:12px Arial,sans-serif; }
-    .edit-field textarea { min-height:68px; resize:vertical; line-height:1.5; }
+    .edit-field textarea { min-height:68px; max-height:260px; resize:none; overflow-y:auto; line-height:1.5; }
     .edit-field input:focus,.edit-field textarea:focus,.repo-card select:focus { border-color:var(--accent); }
     .icon-row { display:grid; grid-template-columns:1fr auto; align-items:end; gap:9px; }
     .upload-field { display:grid; gap:6px; padding:10px; border:1px dashed #555; border-radius:7px; color:#ddd; font-size:11px; cursor:pointer; }
@@ -69,6 +69,26 @@
     .language-option:disabled { opacity:.38; cursor:default; }
     .language-option i,.selected-language i { font-size:14px; }
     .editor-links { margin-top:12px; color:#8d8884; font:10px var(--mono); overflow-wrap:anywhere; }
+    .repo-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+    .repo-save { min-height:34px; padding:7px 10px; }
+    .preview-dialog { width:min(900px,calc(100% - 24px)); max-height:90vh; padding:0; color:var(--ink); background:#171717; border:1px solid #50433f; border-radius:14px; }
+    .preview-dialog::backdrop { background:#000b; backdrop-filter:blur(4px); }
+    .preview-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:15px 18px; border-bottom:1px solid var(--line); }
+    .preview-head strong { font:12px var(--mono); text-transform:uppercase; letter-spacing:.06em; }
+    .preview-body { max-height:calc(90vh - 58px); overflow:auto; padding:22px; }
+    .preview-project { padding:26px; background:linear-gradient(110deg,#202020,#1b1b1b); border:1px solid #3c3c3c; border-radius:13px; }
+    .preview-project .preview-top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .preview-project .preview-icon { width:60px; height:60px; display:grid; place-items:center; overflow:hidden; color:#132126; background:#62d8dc; clip-path:polygon(0 0,78% 0,100% 22%,100% 100%,19% 100%,0 81%); font:700 12px var(--mono); }
+    .preview-project .preview-icon img { width:100%;height:100%;object-fit:cover; }
+    .preview-project h2 { margin:19px 0 9px; font-size:25px; }
+    .preview-project p { color:#bbb; line-height:1.7; white-space:pre-line; }
+    .preview-meta,.preview-languages,.preview-steps { display:flex; flex-wrap:wrap; gap:8px; margin-top:15px; }
+    .preview-meta span,.preview-languages span,.preview-steps span { padding:7px 9px; color:#ddd; background:#292929; border:1px solid #424242; border-radius:7px; font-size:11px; }
+    .preview-label { margin-top:20px; color:#ff786d; font:10px var(--mono); text-transform:uppercase; letter-spacing:.08em; }
+    .preview-note { margin-top:16px; padding:15px; background:#2a2524; border:1px solid #50403d; border-radius:9px; }
+    .preview-gallery { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin-top:12px; }
+    .preview-gallery img { width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:6px;border:1px solid #444; }
+    .preview-foot { display:flex;justify-content:space-between;gap:12px;margin-top:22px;padding-top:14px;border-top:1px solid #414141;color:#ff786d;font:11px var(--mono); }
     .bottom { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:26px; padding-top:18px; border-top:1px solid var(--line); }
     .bottom p { max-width:650px; margin:0; color:#85817d; font-size:11px; line-height:1.6; }
     @media (max-width:680px) {
@@ -88,12 +108,13 @@
     </header>
     <div class="toolbar">
       <div class="toolbar-left"><input id="search" type="search" placeholder="Find a repository…" aria-label="Filter repositories"><button id="refresh" class="button" type="button">Refresh from GitHub</button></div>
-      <div class="toolbar-right"><button id="publish" class="button primary" type="button" disabled>Save &amp; push</button></div>
+      <div class="toolbar-right"><button id="publish" class="button primary" type="button" disabled>Save all &amp; push</button></div>
     </div>
     <p id="message" class="message" role="status" aria-live="polite">Loading your public repositories…</p>
     <section id="repo-list" class="repo-list" aria-label="Public repositories"></section>
     <footer class="bottom"><p>This manager runs only on this computer and uses your existing Git setup to publish the project list. Private repositories and forks are not included.</p><button id="stop" class="button danger" type="button">Close manager</button></footer>
   </main>
+  <dialog id="preview-dialog" class="preview-dialog" aria-labelledby="preview-title"><header class="preview-head"><strong id="preview-title">Project card preview</strong><button class="button" type="button" id="preview-close">Close</button></header><div class="preview-body" id="preview-body"></div></dialog>
   <script src="manager.js"></script>
 </body>
 </html>

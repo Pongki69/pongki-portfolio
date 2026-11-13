@@ -36,7 +36,7 @@ try {
     $powershellPath = (Get-Command powershell.exe -ErrorAction Stop).Source
 
     if ($Mode -eq 'stop') {
-        $managerStopped = Stop-PortfolioService 4179 'node-project-publisher-v2'
+        $managerStopped = Stop-PortfolioService 4179 'node-repo-icon-path-v1'
         $workerStopped = Stop-PortfolioService 4181 'powershell-project-publisher-v2'
         if ($managerStopped -or $workerStopped) {
             Write-Host 'The portfolio project manager service has stopped.' -ForegroundColor Green
@@ -80,7 +80,7 @@ try {
     if ($managerProcessId) {
         try {
             $version = Invoke-RestMethod -Uri 'http://127.0.0.1:4179/api/version' -TimeoutSec 1
-            if ($version.backend -ne 'node-project-publisher-v2') {
+            if ($version.backend -ne 'node-repo-icon-path-v1') {
                 Invoke-RestMethod -Uri 'http://127.0.0.1:4179/api/shutdown' -Method Post -Headers @{ Origin = 'http://127.0.0.1:4179' } -TimeoutSec 2 | Out-Null
                 for ($attempt = 0; $attempt -lt 20; $attempt += 1) {
                     Start-Sleep -Milliseconds 150

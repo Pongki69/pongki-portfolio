@@ -111,6 +111,7 @@ function projectFile(repositories, requestedStatuses, previousConfig) {
       title: (typeof data.title === 'string' ? data.title : previous.title || repo.name).slice(0, 120),
       description: (typeof data.description === 'string' ? data.description : repo.description || previous.description || '').slice(0, 1200),
       url: repo.html_url,
+      defaultBranch: typeof repo.default_branch === 'string' ? repo.default_branch : previous.defaultBranch || 'main',
       liveUrl: requested?.liveUrl ?? previous.liveUrl ?? repo.homepage ?? '',
       language: repo.language || previous.language || '',
       languages,
@@ -224,7 +225,7 @@ const server = createServer(async (request, response) => {
   }
 
   if (request.method === 'GET' && requestUrl.pathname === '/api/version') {
-    sendJson(response, 200, { backend: 'node-project-publisher-v2' });
+    sendJson(response, 200, { backend: 'node-repo-icon-path-v1' });
     return;
   }
 

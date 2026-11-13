@@ -1,13 +1,27 @@
 (() => {
   const icons = {C:'c-plain','C#':'csharp-plain','C++':'cplusplus-plain',CSS:'css3-plain',Dart:'dart-plain',Go:'go-plain',HTML:'html5-plain',Java:'java-plain',JavaScript:'javascript-plain',Kotlin:'kotlin-plain',PHP:'php-plain',Python:'python-plain',Ruby:'ruby-plain',Rust:'rust-original',Swift:'swift-plain',TypeScript:'typescript-plain'};
   const safe = (url, host) => { try { const u=new URL(url,location.href); return (!host||u.hostname===host)&&['https:','http:'].includes(u.protocol)?u:null; } catch { return null; } };
+  const iconSource = (project) => {
+    const path=String(project.icon||'').trim();
+    if(!path)return null;
+    if(/^https:\/\//i.test(path))return safe(path)?.href||null;
+    const relative=path.replace(/\\/g,'/').replace(/^\/+/,''),parts=relative.split('/').filter(Boolean);
+    if(!parts.length||parts.some(part=>part==='.'||part==='..'))return null;
+    if(relative.startsWith('assets/project-icons/'))return safe(relative)?.href||null;
+    const repo=safe(project.url,'github.com');
+    const [owner,name]=repo?.pathname.split('/').filter(Boolean)||[];
+    if(!owner||!name)return null;
+    const branch=encodeURIComponent(project.defaultBranch||'main');
+    const filePath=parts.map(encodeURIComponent).join('/');
+    return `https://raw.githubusercontent.com/${encodeURIComponent(owner)}/${encodeURIComponent(name)}/${branch}/${filePath}`;
+  };
   function render(projects) {
     const groups={live:document.querySelector('.live-projects .project-grid'),'in-progress':document.querySelector('.in-progress-projects .project-grid'),github:document.getElementById('github-project-grid')};
     Object.values(groups).forEach(grid=>grid?.replaceChildren());
     const make=(p)=>{
       const card=document.createElement('article');card.className='project';if(p.status==='live'||p.status==='in-progress')card.classList.add('project-portfolio-wide');const body=document.createElement('div');
       const top=document.createElement('div');top.className='project-top';const row=document.createElement('div');row.className='project-link';
-      let icon;if(p.icon&&safe(p.icon)){icon=document.createElement('img');icon.src=p.icon;icon.alt=`${p.title||p.name} icon`;icon.loading='lazy'}else{icon=document.createElement('span');icon.setAttribute('aria-hidden','true');icon.textContent=(p.name||'GH').slice(0,2).toUpperCase()}icon.className='project-icon github-project-icon';row.append(icon);
+      let icon;const iconUrl=iconSource(p);if(iconUrl){icon=document.createElement('img');icon.src=iconUrl;icon.alt=`${p.title||p.name} icon`;icon.loading='lazy';icon.addEventListener('error',()=>{const fallback=document.createElement('span');fallback.className='project-icon github-project-icon';fallback.setAttribute('aria-hidden','true');fallback.textContent=(p.name||'GH').slice(0,2).toUpperCase();icon.replaceWith(fallback)},{once:true})}else{icon=document.createElement('span');icon.setAttribute('aria-hidden','true');icon.textContent=(p.name||'GH').slice(0,2).toUpperCase()}icon.className='project-icon github-project-icon';row.append(icon);
       const badge=document.createElement('span');badge.className=`tag project-status-badge project-status-${p.status}`;badge.textContent=p.status==='live'?'Live':p.status==='in-progress'?'In progress':'GitHub project';row.append(badge);top.append(row);body.append(top);
       const h=document.createElement('h3');h.textContent=p.title||p.name;body.append(h);
       if(p.description){const d=document.createElement('p');d.textContent=p.description;body.append(d)}
